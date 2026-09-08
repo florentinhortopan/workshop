@@ -55,7 +55,7 @@ export const SEGMENTS: {
     question: "What's the realistic timeline? What blocks us?",
     outcome: "Everyone knows their piece, sees dependencies, knows what blocks us",
     script:
-      "Build the timeline together, month by month. Launch date stays blank until the team writes it. Blockers are typically payments, legal, or API integrations — not design or engineering. Most likely 12–16 weeks from today to first real users.",
+      "Build the timeline together, month by month. Launch date stays blank until the team writes it. Blockers are typically payments, legal, API integrations, or fundraising timing — not design or engineering. Most likely 12–16 weeks from today to first real users.",
   },
   {
     id: 5,
@@ -87,8 +87,9 @@ export const AI_PROMPTS = {
     example: "Auto-verify products; smart seller onboarding; smart search",
   },
   finance: {
-    label: "Finance — “AI features we can monetize are…”",
-    example: "Premium verification badge; AI recommendations; seller analytics",
+    label: "Finance — “AI features investors will fund & we can monetize…”",
+    example:
+      "Premium verification badge; AI recommendations; the metrics that anchor the seed narrative",
   },
   comms: {
     label: "Communications — “AI stories that resonate with the market…”",
@@ -140,7 +141,8 @@ export const MVP_CHALLENGES = [
   },
   {
     role: "Finance",
-    question: "Tier 1 requires how many engineers for how long?",
+    question:
+      "What does Tier 1 cost in runway, and what must the seed round cover?",
   },
   {
     role: "Communications",
@@ -159,7 +161,7 @@ export const CRITICAL_PATH =
 export const BLOCKER_PLACEHOLDERS = [
   { blocker: "Payment processor contract", owner: "Finance" },
   { blocker: "RINA API access", owner: "CEO / Legal" },
-  { blocker: "Engineering headcount", owner: "CEO / Budget" },
+  { blocker: "Seed round timing (runway gate)", owner: "CEO / Finance" },
 ]
 
 /** Google Docs template formatting conventions. */
@@ -238,8 +240,8 @@ export const FACILITATION_TIPS: { title: string; items: string[] }[] = [
   {
     title: "Call out blockers early",
     items: [
-      "If Finance can't promise a contract by date X, surface it now",
-      "“Blocker: Finance needs 3 weeks for the contract. That moves everything. CEO, can we start today?” → forces action",
+      "If Finance can't have the data room ready by date X, surface it now",
+      "“Blocker: the raise needs 6 weeks and gates hiring. CEO, can investor intros start today?” → forces action",
       "Never let a blocker hide until Week 6",
     ],
   },
@@ -330,9 +332,9 @@ export const AFTER_WORKSHOP = [
 export const STANDUP_FORMAT = [
   "Design: “Wireframes __% done — on track?”",
   "Engineering: “Dev env ready? Blocker: [if any]”",
-  "Finance: “Contract progress? Deadline still holding?”",
+  "Finance: “Runway holding? Data room progress?”",
   "Communications: “Story locked? Need anything from product?”",
-  "CEO: “Budget decision? RINA API confirmed?”",
+  "CEO: “Investor meetings booked? Term sheet progress? RINA API confirmed?”",
   "One sentence per person. Stop.",
 ]
 

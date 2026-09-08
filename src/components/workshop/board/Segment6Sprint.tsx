@@ -9,10 +9,15 @@ import { Input } from "../fields"
 import { useWorkshop } from "../WorkshopProvider"
 
 const METRIC_FIELDS: {
-  key: "sellers" | "mrr" | "retention" | "uptime" | "mentions"
+  key: "investors" | "sellers" | "mrr" | "retention" | "uptime" | "mentions"
   label: string
   placeholder: string
 }[] = [
+  {
+    key: "investors",
+    label: "Investor conversations",
+    placeholder: "e.g. 20 first meetings",
+  },
   { key: "sellers", label: "Sellers onboarded", placeholder: "e.g. 50+" },
   { key: "mrr", label: "€ MRR", placeholder: "e.g. 20K within 3 months" },
   { key: "retention", label: "% seller retention", placeholder: "e.g. 95" },
@@ -58,6 +63,32 @@ export function Segment6Sprint() {
       sprint: current.sprint.filter((row) => row.id !== id),
     }))
 
+  /** Add a sprint row for every Segment 5 owner not already in the plan. */
+  const pullOwners = () =>
+    setState((current) => {
+      const have = new Set(
+        current.sprint.map((row) => row.role.trim().toLowerCase())
+      )
+      const missing = current.owners.filter(
+        (owner) =>
+          owner.role.trim() && !have.has(owner.role.trim().toLowerCase())
+      )
+      if (!missing.length) return current
+      return {
+        ...current,
+        sprint: [
+          ...current.sprint,
+          ...missing.map((owner) => ({
+            id: uid("sprint"),
+            role: owner.role,
+            owns: owner.commitment,
+            due: REVIEW_DATE,
+            deliverable: "",
+          })),
+        ],
+      }
+    })
+
   return (
     <div className="flex flex-col gap-5">
       <div>
@@ -65,10 +96,21 @@ export function Segment6Sprint() {
           <p className="label-md text-ink">
             Rapid-fire · 1 minute per owner — due by {REVIEW_DATE}
           </p>
-          <Button type="button" size="sm" variant="outline" onClick={addRow}>
-            <Plus className="h-4 w-4" />
-            Add owner
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={pullOwners}
+              title="Adds a row for every Segment 5 owner missing here, carrying their commitment over."
+            >
+              Pull owners from Segment 5
+            </Button>
+            <Button type="button" size="sm" variant="outline" onClick={addRow}>
+              <Plus className="h-4 w-4" />
+              Add owner
+            </Button>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left min-w-[720px]">

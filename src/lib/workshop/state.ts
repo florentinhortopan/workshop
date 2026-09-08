@@ -13,23 +13,44 @@ export function uid(prefix = "id"): string {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
 }
 
+/** Seed phase: Finance and CEO carry the fundraise; the rest carry product. */
 const OWNER_ROLES: { role: string; commitmentHint: string }[] = [
   { role: "Design Lead", commitmentHint: "Wireframes by…" },
   { role: "Engineering Lead", commitmentHint: "Build ready by…" },
-  { role: "Finance", commitmentHint: "Contracts by…" },
+  { role: "Finance", commitmentHint: "Runway model + data room by…" },
   { role: "Communications", commitmentHint: "Story locked by…" },
   { role: "Strategy", commitmentHint: "Roadmap validated: yes/no" },
-  { role: "CEO", commitmentHint: "Budget approved: yes/no" },
+  { role: "CEO", commitmentHint: "Investor pipeline live by…" },
 ]
 
 /** 30-day sprint rows, dates rebased from 8 Sep 2026. */
 const SPRINT_ROWS: { role: string; owns: string; due: string }[] = [
   { role: "Strategy", owns: "Finalize Tier 1 spec doc", due: "8 Oct 2026" },
-  { role: "Design", owns: "Wireframe all Tier 1 screens", due: "18 Oct 2026" },
-  { role: "Engineering", owns: "Architecture review, setup", due: "8 Oct 2026" },
-  { role: "Finance", owns: "Contracts & budget", due: "22 Sep 2026" },
-  { role: "Communications", owns: "Launch narrative", due: "8 Oct 2026" },
-  { role: "CEO", owns: "Budget approval", due: "22 Sep 2026" },
+  {
+    role: "Design Lead",
+    owns: "Wireframe all Tier 1 screens",
+    due: "18 Oct 2026",
+  },
+  {
+    role: "Engineering Lead",
+    owns: "Architecture review, setup",
+    due: "8 Oct 2026",
+  },
+  {
+    role: "Finance",
+    owns: "Financial model, runway plan & data room",
+    due: "22 Sep 2026",
+  },
+  {
+    role: "Communications",
+    owns: "Launch narrative + seed pitch story",
+    due: "8 Oct 2026",
+  },
+  {
+    role: "CEO",
+    owns: "Seed deck + first 20 investor conversations",
+    due: "8 Oct 2026",
+  },
 ]
 
 const MONTHS: { id: string; label: string }[] = [
@@ -128,8 +149,8 @@ export function createEmptyState(): WorkshopState {
       },
       {
         id: "budget",
-        what: "Budget required",
-        hint: "Available or fundraising needed?",
+        what: "Seed raise",
+        hint: "Target amount + months of runway it buys",
         current: "",
         change: "",
         ownedBy: "Finance + CEO",
@@ -165,7 +186,14 @@ export function createEmptyState(): WorkshopState {
       ...row,
       deliverable: "",
     })),
-    metrics: { sellers: "", mrr: "", retention: "", uptime: "", mentions: "" },
+    metrics: {
+      investors: "",
+      sellers: "",
+      mrr: "",
+      retention: "",
+      uptime: "",
+      mentions: "",
+    },
 
     outcomes: { decisions: "", ownership: "", blockers: "", nextUpdate: "" },
     parkingLot: "",

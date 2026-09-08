@@ -111,6 +111,8 @@ export function exportWorkshopEmail(state: WorkshopState): string {
     .join("\n")
 
   const metrics = [
+    state.metrics.investors &&
+      `- ${state.metrics.investors} investor conversations`,
     state.metrics.sellers && `- ${state.metrics.sellers} sellers onboarded`,
     state.metrics.mrr && `- €${state.metrics.mrr} MRR`,
     state.metrics.retention && `- ${state.metrics.retention}% seller retention`,

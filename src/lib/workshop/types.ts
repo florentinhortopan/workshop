@@ -110,6 +110,7 @@ export type WorkshopState = {
   // Segment 6 — 30-day sprint plan
   sprint: SprintRow[]
   metrics: {
+    investors: string
     sellers: string
     mrr: string
     retention: string

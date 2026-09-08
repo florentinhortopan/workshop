@@ -11,10 +11,10 @@ import { useWorkshop } from "../WorkshopProvider"
 const COMMITMENT_HINTS: Record<string, string> = {
   "design-lead": "Wireframes by…",
   "engineering-lead": "Build ready by…",
-  finance: "Contracts by…",
+  finance: "Runway model + data room by…",
   communications: "Story locked by…",
   strategy: "Roadmap validated: yes/no",
-  ceo: "Budget approved: yes/no",
+  ceo: "Investor pipeline live by…",
 }
 
 const ANSWERS: { value: SignOffAnswer; label: string }[] = [
