@@ -32,26 +32,26 @@
   --green-800: 20, 83, 45;
 
   /* Semantic */
-  --bg-page: 9, 9, 11;
-  --bg-surface: 24, 24, 27;
-  --bg-sunken: 39, 39, 42;
-  --bg-action: 79, 70, 229;
-  --bg-action-hover: 99, 102, 241;
-  --bg-warn: 68, 45, 14;
-  --bg-danger: 88, 28, 34;
-  --bg-ok: 20, 83, 45;
+  --bg-page: 19, 19, 19;
+  --bg-surface: 30, 30, 30;
+  --bg-sunken: 42, 42, 42;
+  --bg-action: 129, 140, 248; /* calm indigo accent */
+  --bg-action-hover: 149, 157, 255;
+  --bg-warn: 62, 45, 12;
+  --bg-danger: 55, 18, 22;
+  --bg-ok: 21, 66, 49;
 
-  --ink: 244, 244, 245;
-  --muted: 161, 161, 170;
-  --action: 165, 180, 252;
-  --action-on: 9, 9, 11;
-  --warn-ink: 254, 243, 199;
-  --danger-ink: 254, 226, 226;
-  --ok-ink: 220, 252, 231;
+  --ink: 229, 226, 225;
+  --muted: 198, 197, 213;
+  --action: 189, 194, 255;
+  --action-on: 12, 18, 32;
+  --warn-ink: 255, 222, 163;
+  --danger-ink: 255, 180, 171;
+  --ok-ink: 178, 242, 213;
 
-  --border: 63, 63, 70;
-  --warn-border: 202, 138, 4;
-  --danger-border: 185, 28, 28;
+  --border: 69, 70, 83;
+  --warn-border: 192, 141, 0;
+  --danger-border: 147, 0, 10;
 }
 
 html {
