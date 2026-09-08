@@ -18,11 +18,16 @@ decision template, and setup guide), with dates rebased from 8 Sep 2026.
   handle disagreement, surface blockers), prep checklists, what to bring,
   works/kills lists, and the after-workshop cadence (weekly standups,
   30-day review, escalation rule).
-- **Export** — the 24-hour summary email assembled live from the board,
-  with copy and download.
+- **Export** — the 24-hour summary email assembled live from the board
+  (copy / download), plus the board record: download the full board as a
+  `.json` file, restore from a file, and browse automatic snapshots.
 
-Notes persist in `localStorage` per browser — put one machine on the
-projector as the canonical board.
+Everything autosaves to `localStorage` on every keystroke (see the "Saved"
+indicator in the header). Snapshots are taken about once a minute while
+editing and always before a reset or restore, so the record is recoverable.
+Notes are per browser — put one machine on the projector as the canonical
+board, and download the board file after the session to keep the record
+outside the browser.
 
 ## Run locally
 

@@ -11,6 +11,7 @@ import { SEGMENT_IDS, type View } from "@/lib/workshop/types"
 import { cn } from "@/lib/utils"
 import {
   BookOpen,
+  Check,
   Clock,
   LayoutList,
   Mail,
@@ -116,8 +117,26 @@ function SegmentTimer() {
   )
 }
 
+function SavedIndicator({ lastSavedAt }: { lastSavedAt: Date | null }) {
+  if (!lastSavedAt) return null
+  return (
+    <span
+      className="flex items-center gap-1 text-xs text-muted tabular-nums shrink-0"
+      title="Everything on this board autosaves to this browser as you type. Snapshots and a downloadable board file live in the Export tab."
+    >
+      <Check className="h-3.5 w-3.5 text-ok" />
+      Saved{" "}
+      {lastSavedAt.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      })}
+    </span>
+  )
+}
+
 export function WorkshopShell({ children }: { children: React.ReactNode }) {
-  const { state, patch, reset } = useWorkshop()
+  const { state, patch, reset, lastSavedAt } = useWorkshop()
 
   const completedCount = useMemo(
     () => SEGMENT_IDS.filter((id) => state.completed[id]).length,
@@ -128,7 +147,7 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
   const confirmReset = () => {
     if (
       window.confirm(
-        "Clear this browser's workshop notes? This does not affect anyone else's device."
+        "Clear this browser's workshop notes? A snapshot is kept — you can restore it from the Export tab. This does not affect anyone else's device."
       )
     ) {
       reset()
@@ -209,6 +228,7 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
             <span className="text-sm text-muted tabular-nums shrink-0">
               {completedCount}/{SEGMENT_IDS.length} segments complete
             </span>
+            <SavedIndicator lastSavedAt={lastSavedAt} />
           </div>
         </div>
       </header>
