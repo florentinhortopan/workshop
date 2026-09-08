@@ -1,6 +1,7 @@
 import { WORKSHOP_DATE } from "./content"
 import {
   SEGMENT_IDS,
+  type Participant,
   type SegmentId,
   type WorkshopState,
 } from "./types"
@@ -38,15 +39,29 @@ const MONTHS: { id: string; label: string }[] = [
   { id: "dec", label: "December 2026" },
 ]
 
+/** Roster from the workshop docs (Engineering added per the Segment 4 table). */
+const DEFAULT_PARTICIPANTS: { name: string; role: string }[] = [
+  { name: "Florentin", role: "Facilitator" },
+  { name: "Daniel", role: "CEO" },
+  { name: "", role: "Design Lead" },
+  { name: "", role: "Strategy/Product" },
+  { name: "", role: "Communications" },
+  { name: "", role: "Finance" },
+  { name: "", role: "Engineering" },
+]
+
 export function createEmptyState(): WorkshopState {
   return {
-    version: 2,
+    version: 3,
     view: "board",
     meta: {
       date: WORKSHOP_DATE,
       facilitator: "Florentin",
-      participants: "CEO (Daniel), Design Lead, Strategy/Product, Communications, Finance, Engineering",
     },
+    participants: DEFAULT_PARTICIPANTS.map((entry) => ({
+      id: uid("participant"),
+      ...entry,
+    })),
     completed: Object.fromEntries(
       SEGMENT_IDS.map((id) => [id, false])
     ) as Record<SegmentId, boolean>,
@@ -158,17 +173,44 @@ export function createEmptyState(): WorkshopState {
   }
 }
 
+/** v2 boards stored participants as one free-text string in meta. */
+function migrateParticipants(raw: Record<string, unknown>): Participant[] | null {
+  const direct = raw.participants
+  if (Array.isArray(direct)) return direct as Participant[]
+  const meta = raw.meta as { participants?: unknown } | undefined
+  const legacy = meta?.participants
+  if (typeof legacy === "string" && legacy.trim()) {
+    return legacy.split(",").map((token) => {
+      const match = token.trim().match(/^(.+?)\s*\((.+)\)$/)
+      return match
+        ? { id: uid("participant"), role: match[1], name: match[2] }
+        : { id: uid("participant"), role: token.trim(), name: "" }
+    })
+  }
+  return null
+}
+
 export function mergeWorkshopState(raw: unknown): WorkshopState {
   const empty = createEmptyState()
   if (!raw || typeof raw !== "object") return empty
   const parsed = raw as Partial<WorkshopState>
-  if (parsed.version !== 2) return empty
+  const version = (parsed as { version?: number }).version
+  if (version !== 2 && version !== 3) return empty
 
   return {
     ...empty,
     ...parsed,
-    version: 2,
-    meta: { ...empty.meta, ...parsed.meta },
+    version: 3,
+    meta: {
+      date:
+        (parsed.meta as { date?: string } | undefined)?.date ?? empty.meta.date,
+      facilitator:
+        (parsed.meta as { facilitator?: string } | undefined)?.facilitator ??
+        empty.meta.facilitator,
+    },
+    participants:
+      migrateParticipants(parsed as Record<string, unknown>) ??
+      empty.participants,
     completed: { ...empty.completed, ...parsed.completed },
     ai: { ...empty.ai, ...parsed.ai },
     launch: { ...empty.launch, ...parsed.launch },

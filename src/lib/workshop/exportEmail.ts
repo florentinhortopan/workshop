@@ -46,12 +46,28 @@ export function exportWorkshopEmail(state: WorkshopState): string {
     .filter(Boolean)
     .join("\n")
 
+  const participants = state.participants
+    .filter((row) => row.role.trim() || row.name.trim())
+    .map((row) =>
+      row.name.trim()
+        ? `${row.role.trim() || "Participant"} (${row.name.trim()})`
+        : row.role.trim()
+    )
+    .join(", ")
+
   const owners = state.owners
+    .filter(
+      (row) =>
+        row.role.trim() ||
+        row.name.trim() ||
+        row.commitment.trim() ||
+        row.blocker.trim()
+    )
     .map((row) => {
       const name = row.name ? ` — ${row.name}` : ""
       const commitment = row.commitment || "[TBD]"
       const blocker = row.blocker ? `\n✗ Blocker: ${row.blocker}` : "\n✓ Blocker? None identified"
-      return `${row.role}${name}\n✓ Responsible for: ${commitment}${blocker}`
+      return `${row.role || "[role TBD]"}${name}\n✓ Responsible for: ${commitment}${blocker}`
     })
     .join("\n\n")
 
@@ -70,6 +86,7 @@ export function exportWorkshopEmail(state: WorkshopState): string {
     .join("\n\n")
 
   const signOffs = state.signOffs
+    .filter((row) => row.role.trim() || row.answer || row.conditions.trim())
     .map((row) => {
       const answer =
         row.answer === "yes"
@@ -79,14 +96,17 @@ export function exportWorkshopEmail(state: WorkshopState): string {
             : row.answer === "conditions"
               ? `WITH CONDITIONS: ${row.conditions || "[unspecified]"}`
               : "[not asked]"
-      return `- ${row.role}: ${answer}`
+      return `- ${row.role || "[role TBD]"}: ${answer}`
     })
     .join("\n")
 
   const sprint = state.sprint
+    .filter(
+      (row) => row.role.trim() || row.owns.trim() || row.deliverable.trim()
+    )
     .map(
       (row) =>
-        `- ${row.role}: ${row.owns} (due ${row.due})${row.deliverable ? ` → ${row.deliverable}` : ""}`
+        `- ${row.role || "[role TBD]"}: ${row.owns} (due ${row.due})${row.deliverable ? ` → ${row.deliverable}` : ""}`
     )
     .join("\n")
 
@@ -107,6 +127,9 @@ export function exportWorkshopEmail(state: WorkshopState): string {
 Team,
 
 Yesterday we locked the product direction and timeline. Here's what we committed to:
+
+Facilitator: ${state.meta.facilitator || "Florentin"}
+Participants: ${participants || "[not captured]"}
 
 ${section(`TIER 1 MVP${state.launch.date ? ` (${state.launch.date} launch target)` : ""}`, tier1)}
 ${

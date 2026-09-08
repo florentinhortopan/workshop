@@ -6,11 +6,13 @@ decision template, and setup guide), with dates rebased from 8 Sep 2026.
 
 ## Views
 
-- **Board** — the interactive tracker: all six segments stacked vertically
+- **Board** — the interactive tracker: an editable participant roster
+  (add/remove people with role + name), all six segments stacked vertically
   with editable fields mirroring the decision document (stickies + themes,
   AI map by role, MVP tiers with agreement checkmarks, month-by-month
   timeline with blockers, agreements + owner sign-offs, 30-day sprint +
-  success metrics), a "Mark complete" toggle per segment feeding the
+  success metrics — the owner, sign-off, and sprint tables all support
+  adding and removing rows), a "Mark complete" toggle per segment feeding the
   progress bar, a per-segment timer with the 3-minute soft alert, workshop
   outcomes, parking lot, and the post-workshop checklist.
 - **Guide** — facilitator script per segment, session roles, who-fills-in

@@ -1,7 +1,10 @@
 "use client"
 
+import { Button } from "@/components/ui/Button"
+import { uid } from "@/lib/workshop/state"
 import type { AgreementRow, OwnerRow, SignOff, SignOffAnswer } from "@/lib/workshop/types"
 import { cn } from "@/lib/utils"
+import { Plus, X } from "lucide-react"
 import { Field, Input } from "../fields"
 import { useWorkshop } from "../WorkshopProvider"
 
@@ -47,6 +50,36 @@ export function Segment5Commit() {
       ),
     }))
 
+  const addOwner = () =>
+    setState((current) => ({
+      ...current,
+      owners: [
+        ...current.owners,
+        { id: uid("owner"), role: "", name: "", commitment: "", blocker: "" },
+      ],
+    }))
+
+  const removeOwner = (id: string) =>
+    setState((current) => ({
+      ...current,
+      owners: current.owners.filter((row) => row.id !== id),
+    }))
+
+  const addSignOff = () =>
+    setState((current) => ({
+      ...current,
+      signOffs: [
+        ...current.signOffs,
+        { id: uid("signoff"), role: "", answer: "" as const, conditions: "" },
+      ],
+    }))
+
+  const removeSignOff = (id: string) =>
+    setState((current) => ({
+      ...current,
+      signOffs: current.signOffs.filter((row) => row.id !== id),
+    }))
+
   return (
     <div className="flex flex-col gap-5">
       {/* What needs agreement */}
@@ -83,22 +116,34 @@ export function Segment5Commit() {
 
       {/* Owner assignments */}
       <div>
-        <p className="label-md text-ink mb-2">Owner assignments & sign-offs</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="label-md text-ink">Owner assignments & sign-offs</p>
+          <Button type="button" size="sm" variant="outline" onClick={addOwner}>
+            <Plus className="h-4 w-4" />
+            Add owner
+          </Button>
+        </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left min-w-[680px]">
+          <table className="w-full text-sm text-left min-w-[720px]">
             <thead>
               <tr className="border-b text-muted">
-                <th className="py-2 pr-3 font-medium">Role</th>
+                <th className="py-2 pr-3 font-medium w-[18%]">Role</th>
                 <th className="py-2 pr-3 font-medium">Owner name</th>
-                <th className="py-2 pr-3 font-medium w-[35%]">Commitment</th>
-                <th className="py-2 font-medium w-[25%]">Blocker?</th>
+                <th className="py-2 pr-3 font-medium w-[32%]">Commitment</th>
+                <th className="py-2 pr-3 font-medium w-[24%]">Blocker?</th>
+                <th className="py-2 w-8" aria-label="Remove" />
               </tr>
             </thead>
             <tbody>
               {state.owners.map((row) => (
                 <tr key={row.id} className="border-b align-top">
-                  <td className="py-2 pr-3 text-ink font-medium whitespace-nowrap pt-4">
-                    {row.role}
+                  <td className="py-2 pr-3">
+                    <Input
+                      value={row.role}
+                      onChange={(value) => setOwner(row.id, { role: value })}
+                      placeholder="Role"
+                      aria-label="Owner role"
+                    />
                   </td>
                   <td className="py-2 pr-3">
                     <Input
@@ -116,12 +161,22 @@ export function Segment5Commit() {
                       placeholder={COMMITMENT_HINTS[row.id] ?? ""}
                     />
                   </td>
-                  <td className="py-2">
+                  <td className="py-2 pr-3">
                     <Input
                       value={row.blocker}
                       onChange={(value) => setOwner(row.id, { blocker: value })}
                       placeholder="None identified"
                     />
+                  </td>
+                  <td className="py-2">
+                    <button
+                      type="button"
+                      onClick={() => removeOwner(row.id)}
+                      className="text-muted hover:text-ink mt-2"
+                      aria-label={`Remove ${row.role || "owner"} row`}
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -132,7 +187,18 @@ export function Segment5Commit() {
 
       {/* Everyone signs off */}
       <div>
-        <p className="label-md text-ink mb-1">Does everyone sign off?</p>
+        <div className="flex items-center justify-between mb-1">
+          <p className="label-md text-ink">Does everyone sign off?</p>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={addSignOff}
+          >
+            <Plus className="h-4 w-4" />
+            Add person
+          </Button>
+        </div>
         <p className="text-sm text-muted mb-3">
           Facilitator asks each person: “Do you sign up for this? What's your
           blocker if not?”
@@ -141,9 +207,14 @@ export function Segment5Commit() {
           {state.signOffs.map((row) => (
             <li
               key={row.id}
-              className="grid grid-cols-1 md:grid-cols-[150px_auto_1fr] gap-2 md:items-center"
+              className="grid grid-cols-1 md:grid-cols-[150px_auto_1fr_auto] gap-2 md:items-center"
             >
-              <span className="label-md text-ink">{row.role}</span>
+              <Input
+                value={row.role}
+                onChange={(value) => setSignOff(row.id, { role: value })}
+                placeholder="Role / name"
+                aria-label="Sign-off role"
+              />
               <div className="flex gap-1">
                 {ANSWERS.map(({ value, label }) => (
                   <button
@@ -174,6 +245,14 @@ export function Segment5Commit() {
                 onChange={(value) => setSignOff(row.id, { conditions: value })}
                 placeholder="I'm in, unless… / conditions"
               />
+              <button
+                type="button"
+                onClick={() => removeSignOff(row.id)}
+                className="text-muted hover:text-ink justify-self-start md:justify-self-auto"
+                aria-label={`Remove ${row.role || "sign-off"} row`}
+              >
+                <X className="h-4 w-4" />
+              </button>
             </li>
           ))}
         </ul>

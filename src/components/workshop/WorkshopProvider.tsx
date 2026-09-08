@@ -123,12 +123,12 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
 
   const restoreFromJson = useCallback(
     (raw: unknown): boolean => {
-      // Only accept files that actually carry a v2 board.
-      if (
-        !raw ||
-        typeof raw !== "object" ||
-        (raw as { version?: number }).version !== 2
-      ) {
+      // Only accept files that actually carry a workshop board (v2 or v3).
+      const version =
+        raw && typeof raw === "object"
+          ? (raw as { version?: number }).version
+          : undefined
+      if (version !== 2 && version !== 3) {
         return false
       }
       pushSnapshot(state, "before restore")

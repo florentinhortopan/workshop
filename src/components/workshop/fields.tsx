@@ -66,6 +66,7 @@ export function Input({
   placeholder,
   onKeyDown,
   className,
+  "aria-label": ariaLabel,
 }: {
   label?: string
   value: string
@@ -73,12 +74,14 @@ export function Input({
   placeholder?: string
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
   className?: string
+  "aria-label"?: string
 }) {
   const input = (
     <input
       type="text"
       value={value}
       placeholder={placeholder}
+      aria-label={ariaLabel}
       onChange={(event) => onChange(event.target.value)}
       onKeyDown={onKeyDown}
       className={cn(

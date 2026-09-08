@@ -7,6 +7,8 @@ export type SegmentId = (typeof SEGMENT_IDS)[number]
 
 export type ListItem = { id: string; text: string }
 
+export type Participant = { id: string; name: string; role: string }
+
 /** Tier feature with the template's agreement checkbox. */
 export type TierItem = { id: string; text: string; agreed: boolean }
 
@@ -61,13 +63,13 @@ export type SprintRow = {
 }
 
 export type WorkshopState = {
-  version: 2
+  version: 3
   view: View
   meta: {
     date: string
     facilitator: string
-    participants: string
   }
+  participants: Participant[]
   completed: Record<SegmentId, boolean>
 
   // Segment 1 — Context setting
