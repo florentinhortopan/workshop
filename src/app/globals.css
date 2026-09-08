@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* IDA palette — raw RGB triplets so they compose with rgba() in Tailwind. */
+:root {
+  --zinc-0: 255, 255, 255;
+  --zinc-50: 250, 250, 250;
+  --zinc-100: 244, 244, 245;
+  --zinc-200: 228, 228, 231;
+  --zinc-300: 212, 212, 216;
+  --zinc-400: 161, 161, 170;
+  --zinc-500: 113, 113, 122;
+  --zinc-800: 39, 39, 42;
+  --zinc-950: 9, 9, 11;
+  --zinc-1000: 0, 0, 0;
+
+  --indigo-50: 238, 242, 255;
+  --indigo-700: 67, 56, 202;
+  --indigo-800: 55, 48, 163;
+  --indigo-900: 49, 46, 129;
+
+  --amber-50: 255, 247, 212;
+  --amber-800: 126, 69, 16;
+  --amber-300: 255, 191, 56;
+
+  --red-50: 254, 228, 226;
+  --red-200: 253, 170, 164;
+  --red-700: 155, 34, 25;
+
+  --green-50: 220, 252, 231;
+  --green-800: 20, 83, 45;
+
+  /* Semantic */
+  --bg-page: var(--zinc-50);
+  --bg-surface: var(--zinc-0);
+  --bg-sunken: var(--zinc-100);
+  --bg-action: var(--indigo-900);
+  --bg-action-hover: var(--indigo-800);
+  --bg-warn: var(--amber-50);
+  --bg-danger: var(--red-50);
+  --bg-ok: var(--green-50);
+
+  --ink: var(--zinc-950);
+  --muted: var(--zinc-500);
+  --action: var(--indigo-900);
+  --action-on: var(--indigo-50);
+  --warn-ink: var(--amber-800);
+  --danger-ink: var(--red-700);
+  --ok-ink: var(--green-800);
+
+  --border: var(--zinc-200);
+  --warn-border: var(--amber-300);
+  --danger-border: var(--red-200);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer components {
+  .label-sm {
+    @apply text-[12px] leading-[20px] font-normal;
+  }
+  .label-md {
+    @apply text-[14px] leading-[22px] font-medium;
+  }
+  .heading-sm {
+    @apply text-[16px] leading-[24px] font-semibold;
+  }
+  .heading-md {
+    @apply text-[24px] leading-[32px] font-medium max-md:text-[20px] max-md:leading-[28px];
+  }
+}
