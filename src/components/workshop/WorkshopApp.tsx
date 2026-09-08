@@ -3,6 +3,7 @@
 import { BoardView } from "./board/BoardView"
 import { ExportView } from "./ExportView"
 import { GuideView } from "./GuideView"
+import { tr } from "@/lib/workshop/i18n"
 import { WorkshopProvider, useWorkshop } from "./WorkshopProvider"
 import { WorkshopShell } from "./WorkshopShell"
 
@@ -19,12 +20,12 @@ function ActiveView() {
 }
 
 function Workspace() {
-  const { hydrated } = useWorkshop()
+  const { hydrated, locale } = useWorkshop()
 
   if (!hydrated) {
     return (
       <div className="min-h-screen flex items-center justify-center text-muted">
-        Loading workspace…
+        {tr(locale, "Loading workspace…")}
       </div>
     )
   }

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button"
 import { SEGMENTS, OVERTIME_NOTE } from "@/lib/workshop/content"
+import { tr } from "@/lib/workshop/i18n"
 import { uid } from "@/lib/workshop/state"
 import type { Participant } from "@/lib/workshop/types"
 import { cn } from "@/lib/utils"
@@ -26,7 +27,16 @@ const SEGMENT_BODIES = {
 } as const
 
 export function BoardView() {
-  const { state, setState } = useWorkshop()
+  const { state, setState, locale } = useWorkshop()
+  const jumpTo = (id: string) => {
+    const target = document.getElementById(id)
+    if (!target) return
+    const offset = 168
+    const targetY = Math.max(0, window.scrollY + target.getBoundingClientRect().top - offset)
+    window.scrollTo({ top: targetY, behavior: "smooth" })
+    window.setTimeout(() => window.scrollTo({ top: targetY }), 180)
+    window.history.replaceState(null, "", `#${id}`)
+  }
 
   const setMeta = (key: keyof typeof state.meta, value: string) => {
     setState((current) => ({
@@ -63,20 +73,22 @@ export function BoardView() {
       {/* Session header — from the Google Docs template */}
       <Surface>
         <h1 className="heading-md font-display text-ink mb-1">
-          Real-time decision board
+          {tr(locale, "Real-time decision board")}
         </h1>
         <p className="text-sm text-muted mb-4">
-          Fill in as the group speaks. Notes stay in this browser — put one
-          machine on the projector as the canonical board.
+          {tr(
+            locale,
+            "Fill in as the group speaks. Notes stay in this browser — put one machine on the projector as the canonical board."
+          )}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl">
           <Input
-            label="Date"
+            label={tr(locale, "Date")}
             value={state.meta.date}
             onChange={(value) => setMeta("date", value)}
           />
           <Input
-            label="Facilitator"
+            label={tr(locale, "Facilitator")}
             value={state.meta.facilitator}
             onChange={(value) => setMeta("facilitator", value)}
           />
@@ -85,7 +97,7 @@ export function BoardView() {
         <div className="mt-4">
           <div className="flex items-center justify-between mb-2">
             <p className="label-md text-ink">
-              Participants{" "}
+              {tr(locale, "Participants")}{" "}
               <span className="text-muted font-normal">
                 ({state.participants.length})
               </span>
@@ -97,7 +109,7 @@ export function BoardView() {
               onClick={addParticipant}
             >
               <Plus className="h-4 w-4" />
-              Add participant
+              {tr(locale, "Add participant")}
             </Button>
           </div>
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -111,16 +123,16 @@ export function BoardView() {
                   onChange={(value) =>
                     setParticipant(participant.id, { role: value })
                   }
-                  placeholder="Role (e.g. Legal)"
-                  aria-label="Participant role"
+                  placeholder={tr(locale, "Role (e.g. Legal)")}
+                  aria-label={tr(locale, "Participant role")}
                 />
                 <Input
                   value={participant.name}
                   onChange={(value) =>
                     setParticipant(participant.id, { name: value })
                   }
-                  placeholder="Name"
-                  aria-label="Participant name"
+                  placeholder={tr(locale, "Name")}
+                  aria-label={tr(locale, "Participant name")}
                 />
                 <button
                   type="button"
@@ -134,8 +146,10 @@ export function BoardView() {
             ))}
           </ul>
           <p className="text-sm text-muted mt-2">
-            Everyone contributes their expertise — if a department is in the
-            room, add its row to the owner and sign-off tables in Segment 5 too.
+            {tr(
+              locale,
+              "Everyone contributes their expertise — if a department is in the room, add its row to the owner and sign-off tables in Segment 5 too."
+            )}
           </p>
         </div>
       </Surface>
@@ -149,6 +163,10 @@ export function BoardView() {
           <a
             key={segment.id}
             href={`#segment-${segment.id}`}
+            onClick={(event) => {
+              event.preventDefault()
+              jumpTo(`segment-${segment.id}`)
+            }}
             className={cn(
               "shrink-0 rounded-sm px-3 py-1.5 text-sm border bg-surface shadow-soft",
               "hover:border-action hover:text-action",
@@ -159,15 +177,19 @@ export function BoardView() {
             {state.completed[segment.id] ? (
               <Check className="h-3.5 w-3.5 inline -mt-0.5 mr-1" />
             ) : null}
-            <span className="tabular-nums">{segment.id}</span> {segment.title}
+            <span className="tabular-nums">{segment.id}</span> {tr(locale, segment.title)}
             <span className="text-xs opacity-70 ml-1">{segment.minutes}m</span>
           </a>
         ))}
         <a
           href="#outcomes"
+          onClick={(event) => {
+            event.preventDefault()
+            jumpTo("outcomes")
+          }}
           className="shrink-0 rounded-sm px-3 py-1.5 text-sm border bg-surface shadow-soft hover:border-action hover:text-action"
         >
-          Outcomes
+          {tr(locale, "Outcomes")}
         </a>
       </nav>
 
@@ -180,7 +202,7 @@ export function BoardView() {
         )
       })}
 
-      <p className="text-sm text-muted px-1">{OVERTIME_NOTE}</p>
+      <p className="text-sm text-muted px-1">{tr(locale, OVERTIME_NOTE)}</p>
 
       <Outcomes />
     </div>
@@ -194,7 +216,7 @@ function SegmentCard({
   id: keyof typeof SEGMENT_BODIES
   children: React.ReactNode
 }) {
-  const { state, setState } = useWorkshop()
+  const { state, setState, locale } = useWorkshop()
   const segment = SEGMENTS.find((entry) => entry.id === id)!
   const complete = state.completed[id]
 
@@ -213,10 +235,10 @@ function SegmentCard({
       <header className="flex flex-wrap items-start justify-between gap-3 mb-1">
         <div>
           <p className="label-sm text-action uppercase tracking-wide">
-            Segment {segment.id} · {segment.minutes} minutes
+            {tr(locale, "Segment")} {segment.id} · {segment.minutes} {tr(locale, "minutes")}
           </p>
-          <h2 className="heading-md font-display text-ink">{segment.title}</h2>
-          <p className="text-muted mt-0.5">{segment.question}</p>
+          <h2 className="heading-md font-display text-ink">{tr(locale, segment.title)}</h2>
+          <p className="text-muted mt-0.5">{tr(locale, segment.question)}</p>
         </div>
         <button
           type="button"
@@ -230,23 +252,24 @@ function SegmentCard({
           )}
         >
           <Check className="h-4 w-4" />
-          {complete ? "Complete" : "Mark complete"}
+          {complete ? tr(locale, "Complete") : tr(locale, "Mark complete")}
         </button>
       </header>
 
       <details className="mb-4 group">
         <summary className="text-sm text-action cursor-pointer select-none">
-          Facilitator script
+          {tr(locale, "Facilitator script")}
         </summary>
         <p className="text-sm text-ink leading-relaxed mt-2 border-l-2 border-action/40 pl-3">
-          {segment.script}
+          {tr(locale, segment.script)}
         </p>
       </details>
 
       {children}
 
       <p className="text-sm text-muted mt-4">
-        <span className="font-medium text-ink">Outcome:</span> {segment.outcome}
+        <span className="font-medium text-ink">{tr(locale, "Outcome:")}</span>{" "}
+        {tr(locale, segment.outcome)}
       </p>
     </Surface>
   )

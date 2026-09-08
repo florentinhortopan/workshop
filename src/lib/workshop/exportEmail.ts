@@ -1,4 +1,5 @@
 import { REVIEW_DATE } from "./content"
+import { tr, type Locale } from "./i18n"
 import type { WorkshopState } from "./types"
 
 const RULE = "━".repeat(56)
@@ -18,9 +19,10 @@ function lines(items: string[], mark: string) {
  * Post-workshop summary email, following the template in the
  * Workshop Setup Guide (send within 24 hours).
  */
-export function exportWorkshopEmail(state: WorkshopState): string {
+export function exportWorkshopEmail(state: WorkshopState, locale: Locale = "en"): string {
+  const t = (text: string) => tr(locale, text)
   const tier1 = lines(
-    state.tier1.map((item) => `${item.text}${item.agreed ? "" : " [TBD]"}`),
+    state.tier1.map((item) => `${item.text}${item.agreed ? "" : ` [${t("TBD")}]`}`),
     "✓"
   )
   const tier2 = lines(state.tier2.map((item) => item.text), "→")
@@ -28,8 +30,8 @@ export function exportWorkshopEmail(state: WorkshopState): string {
   const timeline = state.months
     .map((month) => {
       const parts = [
-        month.early && `  Week 1–2: ${month.early}`,
-        month.late && `  Week 3–4: ${month.late}`,
+        month.early && `  ${t("Week 1–2")}: ${month.early}`,
+        month.late && `  ${t("Week 3–4")}: ${month.late}`,
         month.blocker && `  [BLOCKER] ${month.blocker}`,
       ].filter(Boolean)
       if (!parts.length) return ""
@@ -39,9 +41,9 @@ export function exportWorkshopEmail(state: WorkshopState): string {
     .join("\n\n")
 
   const launch = [
-    `Launch date: ${state.launch.date || "[TBD]"}`,
-    state.launch.sellers && `Target sellers Day 1: ${state.launch.sellers}`,
-    state.launch.revenue && `Revenue target: ${state.launch.revenue}`,
+    `${t("Launch date")}: ${state.launch.date || "[TBD]"}`,
+    state.launch.sellers && `${t("Target sellers (Day 1)")}: ${state.launch.sellers}`,
+    state.launch.revenue && `${t("Revenue target")}: ${state.launch.revenue}`,
   ]
     .filter(Boolean)
     .join("\n")
@@ -50,7 +52,7 @@ export function exportWorkshopEmail(state: WorkshopState): string {
     .filter((row) => row.role.trim() || row.name.trim())
     .map((row) =>
       row.name.trim()
-        ? `${row.role.trim() || "Participant"} (${row.name.trim()})`
+        ? `${row.role.trim() || t("Participant")} (${row.name.trim()})`
         : row.role.trim()
     )
     .join(", ")
@@ -66,8 +68,10 @@ export function exportWorkshopEmail(state: WorkshopState): string {
     .map((row) => {
       const name = row.name ? ` — ${row.name}` : ""
       const commitment = row.commitment || "[TBD]"
-      const blocker = row.blocker ? `\n✗ Blocker: ${row.blocker}` : "\n✓ Blocker? None identified"
-      return `${row.role || "[role TBD]"}${name}\n✓ Responsible for: ${commitment}${blocker}`
+      const blocker = row.blocker
+        ? `\n✗ ${t("Blocker")}: ${row.blocker}`
+        : `\n✓ ${t("Blocker?")} ${t("None identified")}`
+      return `${row.role || "[role TBD]"}${name}\n✓ ${t("Responsible for")}: ${commitment}${blocker}`
     })
     .join("\n\n")
 
@@ -75,9 +79,9 @@ export function exportWorkshopEmail(state: WorkshopState): string {
     .filter((row) => row.blocker.trim())
     .map((row) => {
       const details = [
-        row.owner && `   Owner: ${row.owner}`,
-        row.deadline && `   Deadline: ${row.deadline}`,
-        row.status && `   Status: ${row.status}`,
+        row.owner && `   ${t("Owner")}: ${row.owner}`,
+        row.deadline && `   ${t("Deadline")}: ${row.deadline}`,
+        row.status && `   ${t("Status")}: ${row.status}`,
       ]
         .filter(Boolean)
         .join("\n")
@@ -95,7 +99,7 @@ export function exportWorkshopEmail(state: WorkshopState): string {
             ? "NO"
             : row.answer === "conditions"
               ? `WITH CONDITIONS: ${row.conditions || "[unspecified]"}`
-              : "[not asked]"
+              : t("[not asked]")
       return `- ${row.role || "[role TBD]"}: ${answer}`
     })
     .join("\n")
@@ -112,60 +116,60 @@ export function exportWorkshopEmail(state: WorkshopState): string {
 
   const metrics = [
     state.metrics.investors &&
-      `- ${state.metrics.investors} investor conversations`,
-    state.metrics.sellers && `- ${state.metrics.sellers} sellers onboarded`,
+      `- ${state.metrics.investors} ${t("investor conversations")}`,
+    state.metrics.sellers && `- ${state.metrics.sellers} ${t("sellers onboarded")}`,
     state.metrics.mrr && `- €${state.metrics.mrr} MRR`,
-    state.metrics.retention && `- ${state.metrics.retention}% seller retention`,
-    state.metrics.uptime && `- ${state.metrics.uptime}% system uptime`,
-    state.metrics.mentions && `- ${state.metrics.mentions} media mentions`,
+    state.metrics.retention && `- ${state.metrics.retention}% ${t("seller retention")}`,
+    state.metrics.uptime && `- ${state.metrics.uptime}% ${t("system uptime")}`,
+    state.metrics.mentions && `- ${state.metrics.mentions} ${t("media mentions")}`,
   ]
     .filter(Boolean)
     .join("\n")
 
   const decisions = state.outcomes.decisions.trim()
 
-  return `Subject: IDA Product Strategy — Decisions & Next Steps (${state.meta.date})
+  return `${t("Subject")}: IDA Product Strategy — ${t("Decisions & Next Steps")} (${state.meta.date})
 
-Team,
+${t("Team")},
 
-Yesterday we locked the product direction and timeline. Here's what we committed to:
+${t("Yesterday we locked the product direction and timeline. Here's what we committed to:")}
 
-Facilitator: ${state.meta.facilitator || "Florentin"}
-Participants: ${participants || "[not captured]"}
+${t("Facilitator")}: ${state.meta.facilitator || "Florentin"}
+${t("Participants")}: ${participants || t("[not captured]")}
 
-${section(`TIER 1 MVP${state.launch.date ? ` (${state.launch.date} launch target)` : ""}`, tier1)}
+${section(`${t("TIER 1 MVP")}${state.launch.date ? ` (${state.launch.date} ${t("launch target")})` : ""}`, tier1)}
 ${
   tier2
-    ? `Defer to Phase 2 (post-launch):
+    ? `${t("Defer to Phase 2 (post-launch)")}:
 ${tier2}
 `
     : ""
 }
-${section("REALISTIC TIMELINE", `${timeline}${timeline && launch ? "\n\n" : ""}${launch}`)}
-${section("OWNER COMMITMENTS", owners)}
-${section("CRITICAL BLOCKERS (Must resolve immediately)", blockers)}
-${section("DECISIONS", decisions)}
-SIGN-OFFS
+${section(t("REALISTIC TIMELINE"), `${timeline}${timeline && launch ? "\n\n" : ""}${launch}`)}
+${section(t("OWNER COMMITMENTS"), owners)}
+${section(t("CRITICAL BLOCKERS (Must resolve immediately)"), blockers)}
+${section(t("DECISIONS"), decisions)}
+${t("SIGN-OFFS")}
 ${signOffs}
 
-${section("30-DAY SPRINT", sprint)}
-${metrics ? `SUCCESS METRICS (Day 1 of launch)\n${metrics}\n\n` : ""}${RULE}
-NEXT STEPS
+${section(t("30-DAY SPRINT"), sprint)}
+${metrics ? `${t("SUCCESS METRICS (Day 1 of launch)")}\n${metrics}\n\n` : ""}${RULE}
+${t("NEXT STEPS")}
 ${RULE}
 
-1. Everyone reply to this email: "Confirmed — I own [your piece]"
-2. Add to calendars:
-   • Weekly 15-min standups
-   • 30-day review (${state.outcomes.nextUpdate || REVIEW_DATE})
-   • Monthly reviews (1st Friday of each month)
-3. Blocker owners: start TODAY — legal timelines don't compress.
+1. ${t("Everyone reply to this email: \"Confirmed — I own [your piece]\"")}
+2. ${t("Add to calendars")}:
+   • ${t("Weekly 15-min standups")}
+   • ${t("30-day review")} (${state.outcomes.nextUpdate || REVIEW_DATE})
+   • ${t("Monthly reviews (1st Friday of each month)")}
+3. ${t("Blocker owners: start TODAY — legal timelines don't compress.")}
 
-→ 30-DAY REVIEW: ${state.outcomes.nextUpdate || REVIEW_DATE}
-   Question: on track or pivoting?
+→ ${t("30-DAY REVIEW")}: ${state.outcomes.nextUpdate || REVIEW_DATE}
+   ${t("Question")}: ${t("on track or pivoting?")}
 
-This is binding for the next 30 days. If your timeline or constraints change, flag it in standup — don't wait.
+${t("This is binding for the next 30 days. If your timeline or constraints change, flag it in standup — don't wait.")}
 
-We're close. Let's execute.
+${t("We're close. Let's execute.")}
 
 —${state.meta.facilitator || "Florentin"}
 `

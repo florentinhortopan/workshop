@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button"
 import { REVIEW_DATE } from "@/lib/workshop/content"
+import { tr } from "@/lib/workshop/i18n"
 import { uid } from "@/lib/workshop/state"
 import type { SprintRow } from "@/lib/workshop/types"
 import { Plus, X } from "lucide-react"
@@ -26,7 +27,7 @@ const METRIC_FIELDS: {
 ]
 
 export function Segment6Sprint() {
-  const { state, setState } = useWorkshop()
+  const { state, setState, locale } = useWorkshop()
 
   const setRow = (id: string, patch: Partial<SprintRow>) =>
     setState((current) => ({
@@ -94,7 +95,7 @@ export function Segment6Sprint() {
       <div>
         <div className="flex items-center justify-between mb-2">
           <p className="label-md text-ink">
-            Rapid-fire · 1 minute per owner — due by {REVIEW_DATE}
+            {tr(locale, "Rapid-fire · 1 minute per owner — due by")} {REVIEW_DATE}
           </p>
           <div className="flex gap-2">
             <Button
@@ -102,13 +103,16 @@ export function Segment6Sprint() {
               size="sm"
               variant="outline"
               onClick={pullOwners}
-              title="Adds a row for every Segment 5 owner missing here, carrying their commitment over."
+              title={tr(
+                locale,
+                "Adds a row for every Segment 5 owner missing here, carrying their commitment over."
+              )}
             >
-              Pull owners from Segment 5
+              {tr(locale, "Pull owners from Segment 5")}
             </Button>
             <Button type="button" size="sm" variant="outline" onClick={addRow}>
               <Plus className="h-4 w-4" />
-              Add owner
+              {tr(locale, "Add owner")}
             </Button>
           </div>
         </div>
@@ -116,11 +120,11 @@ export function Segment6Sprint() {
           <table className="w-full text-sm text-left min-w-[720px]">
             <thead>
               <tr className="border-b text-muted">
-                <th className="py-2 pr-3 font-medium w-[16%]">Owner</th>
-                <th className="py-2 pr-3 font-medium w-[30%]">What they own</th>
-                <th className="py-2 pr-3 font-medium">Due date</th>
-                <th className="py-2 pr-3 font-medium w-[32%]">Deliverable</th>
-                <th className="py-2 w-8" aria-label="Remove" />
+                <th className="py-2 pr-3 font-medium w-[16%]">{tr(locale, "Owner")}</th>
+                <th className="py-2 pr-3 font-medium w-[30%]">{tr(locale, "What they own")}</th>
+                <th className="py-2 pr-3 font-medium">{tr(locale, "Due date")}</th>
+                <th className="py-2 pr-3 font-medium w-[32%]">{tr(locale, "Deliverable")}</th>
+                <th className="py-2 w-8" aria-label={tr(locale, "Remove")} />
               </tr>
             </thead>
             <tbody>
@@ -130,8 +134,8 @@ export function Segment6Sprint() {
                     <Input
                       value={row.role}
                       onChange={(value) => setRow(row.id, { role: value })}
-                      placeholder="Role"
-                      aria-label="Sprint owner role"
+                      placeholder={tr(locale, "Role")}
+                      aria-label={tr(locale, "Sprint owner role")}
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -152,7 +156,7 @@ export function Segment6Sprint() {
                       onChange={(value) =>
                         setRow(row.id, { deliverable: value })
                       }
-                      placeholder="What lands on the table?"
+                      placeholder={tr(locale, "What lands on the table?")}
                     />
                   </td>
                   <td className="py-2">
@@ -173,15 +177,17 @@ export function Segment6Sprint() {
       </div>
 
       <div>
-        <p className="label-md text-ink mb-2">Success metrics (Day 1 of launch)</p>
+        <p className="label-md text-ink mb-2">
+          {tr(locale, "Success metrics (Day 1 of launch)")}
+        </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
           {METRIC_FIELDS.map(({ key, label, placeholder }) => (
             <Input
               key={key}
-              label={label}
+              label={tr(locale, label)}
               value={state.metrics[key]}
               onChange={(value) => setMetric(key, value)}
-              placeholder={placeholder}
+              placeholder={tr(locale, placeholder)}
             />
           ))}
         </div>

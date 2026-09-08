@@ -160,8 +160,8 @@ export const CRITICAL_PATH =
 
 export const BLOCKER_PLACEHOLDERS = [
   { blocker: "Payment processor contract", owner: "Finance" },
-  { blocker: "RINA API access", owner: "CEO / Legal" },
-  { blocker: "Seed round timing (runway gate)", owner: "CEO / Finance" },
+  { blocker: "RINA API access", owner: "Leadership / Legal" },
+  { blocker: "Seed round timing (runway gate)", owner: "Leadership / Finance" },
 ]
 
 /** Google Docs template formatting conventions. */
@@ -241,7 +241,7 @@ export const FACILITATION_TIPS: { title: string; items: string[] }[] = [
     title: "Call out blockers early",
     items: [
       "If Finance can't have the data room ready by date X, surface it now",
-      "“Blocker: the raise needs 6 weeks and gates hiring. CEO, can investor intros start today?” → forces action",
+      "“Blocker: the raise needs 6 weeks and gates hiring. Can leadership start investor intros today?” → forces action",
       "Never let a blocker hide until Week 6",
     ],
   },
@@ -289,11 +289,11 @@ export const SUCCESS_FACTORS = [
   "Specific outputs (features, dates, owners — not “we'll figure it out”)",
   "Roles are clear (design talks design, finance talks finance)",
   "Facilitator moves it (keeps time, synthesizes, prevents debate loops)",
-  "CEO doesn't pretend to know (asks questions, trusts the team)",
+  "Leadership asks questions and trusts domain owners",
 ]
 
 export const KILLERS = [
-  "CEO dominates without listening",
+  "A single voice dominates without listening",
   "One person long-winded",
   "No decisions (just “let's explore options”)",
   "Vague outcomes (“we'll figure it out”)",
@@ -334,12 +334,12 @@ export const STANDUP_FORMAT = [
   "Engineering: “Dev env ready? Blocker: [if any]”",
   "Finance: “Runway holding? Data room progress?”",
   "Communications: “Story locked? Need anything from product?”",
-  "CEO: “Investor meetings booked? Term sheet progress? RINA API confirmed?”",
+  "Leadership: “Investor meetings booked? Term sheet progress? RINA API confirmed?”",
   "One sentence per person. Stop.",
 ]
 
 export const ESCALATION_RULE =
-  "If anyone is off track at the 30-day review, hold an emergency 30-minute sync with the CEO and that owner."
+  "If anyone is off track at the 30-day review, hold an emergency 30-minute sync with leadership and that owner."
 
 /** Post-workshop checklist items (from the template). */
 export const CHECKLIST_ITEMS: { id: string; label: string }[] = [

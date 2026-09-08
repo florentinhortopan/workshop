@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/Button"
+import { tr } from "@/lib/workshop/i18n"
 import { uid } from "@/lib/workshop/state"
 import type { AgreementRow, OwnerRow, SignOff, SignOffAnswer } from "@/lib/workshop/types"
 import { cn } from "@/lib/utils"
@@ -24,7 +25,7 @@ const ANSWERS: { value: SignOffAnswer; label: string }[] = [
 ]
 
 export function Segment5Commit() {
-  const { state, setState } = useWorkshop()
+  const { state, setState, locale } = useWorkshop()
 
   const setAgreement = (id: string, patch: Partial<AgreementRow>) =>
     setState((current) => ({
@@ -84,7 +85,9 @@ export function Segment5Commit() {
     <div className="flex flex-col gap-5">
       {/* What needs agreement */}
       <div>
-        <p className="label-md text-ink mb-2">What needs agreement · 5 min</p>
+        <p className="label-md text-ink mb-2">
+          {tr(locale, "What needs agreement · 5 min")}
+        </p>
         <div className="flex flex-col gap-3">
           {state.agreements.map((row) => (
             <div
@@ -93,21 +96,23 @@ export function Segment5Commit() {
             >
               <div className="md:col-span-2 flex flex-wrap items-baseline justify-between gap-2">
                 <p className="label-md text-ink">{row.what}</p>
-                <p className="text-sm text-muted">Owned by {row.ownedBy}</p>
+                <p className="text-sm text-muted">
+                  {tr(locale, "Owned by")} {tr(locale, row.ownedBy)}
+                </p>
               </div>
               <Field
-                label="Current"
+                label={tr(locale, "Current")}
                 rows={2}
                 value={row.current}
                 onChange={(value) => setAgreement(row.id, { current: value })}
-                placeholder={row.hint}
+                placeholder={tr(locale, row.hint)}
               />
               <Field
-                label="✓ Agree or change"
+                label={tr(locale, "✓ Agree or change")}
                 rows={2}
                 value={row.change}
                 onChange={(value) => setAgreement(row.id, { change: value })}
-                placeholder="✓ agree — or the modification"
+                placeholder={tr(locale, "✓ agree — or the modification")}
               />
             </div>
           ))}
@@ -117,21 +122,23 @@ export function Segment5Commit() {
       {/* Owner assignments */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="label-md text-ink">Owner assignments & sign-offs</p>
+          <p className="label-md text-ink">
+            {tr(locale, "Owner assignments & sign-offs")}
+          </p>
           <Button type="button" size="sm" variant="outline" onClick={addOwner}>
             <Plus className="h-4 w-4" />
-            Add owner
+            {tr(locale, "Add owner")}
           </Button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left min-w-[720px]">
             <thead>
               <tr className="border-b text-muted">
-                <th className="py-2 pr-3 font-medium w-[18%]">Role</th>
-                <th className="py-2 pr-3 font-medium">Owner name</th>
-                <th className="py-2 pr-3 font-medium w-[32%]">Commitment</th>
-                <th className="py-2 pr-3 font-medium w-[24%]">Blocker?</th>
-                <th className="py-2 w-8" aria-label="Remove" />
+                <th className="py-2 pr-3 font-medium w-[18%]">{tr(locale, "Role")}</th>
+                <th className="py-2 pr-3 font-medium">{tr(locale, "Owner name")}</th>
+                <th className="py-2 pr-3 font-medium w-[32%]">{tr(locale, "Commitment")}</th>
+                <th className="py-2 pr-3 font-medium w-[24%]">{tr(locale, "Blocker?")}</th>
+                <th className="py-2 w-8" aria-label={tr(locale, "Remove")} />
               </tr>
             </thead>
             <tbody>
@@ -141,15 +148,15 @@ export function Segment5Commit() {
                     <Input
                       value={row.role}
                       onChange={(value) => setOwner(row.id, { role: value })}
-                      placeholder="Role"
-                      aria-label="Owner role"
+                      placeholder={tr(locale, "Role")}
+                      aria-label={tr(locale, "Owner role")}
                     />
                   </td>
                   <td className="py-2 pr-3">
                     <Input
                       value={row.name}
                       onChange={(value) => setOwner(row.id, { name: value })}
-                      placeholder="Name"
+                      placeholder={tr(locale, "Name")}
                     />
                   </td>
                   <td className="py-2 pr-3">
@@ -158,14 +165,14 @@ export function Segment5Commit() {
                       onChange={(value) =>
                         setOwner(row.id, { commitment: value })
                       }
-                      placeholder={COMMITMENT_HINTS[row.id] ?? ""}
+                      placeholder={tr(locale, COMMITMENT_HINTS[row.id] ?? "")}
                     />
                   </td>
                   <td className="py-2 pr-3">
                     <Input
                       value={row.blocker}
                       onChange={(value) => setOwner(row.id, { blocker: value })}
-                      placeholder="None identified"
+                      placeholder={tr(locale, "None identified")}
                     />
                   </td>
                   <td className="py-2">
@@ -188,7 +195,7 @@ export function Segment5Commit() {
       {/* Everyone signs off */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <p className="label-md text-ink">Does everyone sign off?</p>
+          <p className="label-md text-ink">{tr(locale, "Does everyone sign off?")}</p>
           <Button
             type="button"
             size="sm"
@@ -196,12 +203,14 @@ export function Segment5Commit() {
             onClick={addSignOff}
           >
             <Plus className="h-4 w-4" />
-            Add person
+            {tr(locale, "Add person")}
           </Button>
         </div>
         <p className="text-sm text-muted mb-3">
-          Facilitator asks each person: “Do you sign up for this? What's your
-          blocker if not?”
+          {tr(
+            locale,
+            "Facilitator asks each person: “Do you sign up for this? What's your blocker if not?”"
+          )}
         </p>
         <ul className="flex flex-col gap-2">
           {state.signOffs.map((row) => (
@@ -212,8 +221,8 @@ export function Segment5Commit() {
               <Input
                 value={row.role}
                 onChange={(value) => setSignOff(row.id, { role: value })}
-                placeholder="Role / name"
-                aria-label="Sign-off role"
+                placeholder={tr(locale, "Role / name")}
+                aria-label={tr(locale, "Sign-off role")}
               />
               <div className="flex gap-1">
                 {ANSWERS.map(({ value, label }) => (
@@ -236,14 +245,14 @@ export function Segment5Commit() {
                         : "bg-surface text-muted hover:border-action"
                     )}
                   >
-                    {label}
+                    {tr(locale, label)}
                   </button>
                 ))}
               </div>
               <Input
                 value={row.conditions}
                 onChange={(value) => setSignOff(row.id, { conditions: value })}
-                placeholder="I'm in, unless… / conditions"
+                placeholder={tr(locale, "I'm in, unless… / conditions")}
               />
               <button
                 type="button"

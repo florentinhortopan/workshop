@@ -7,6 +7,7 @@ import {
   WORKSHOP_SUBTITLE,
   WORKSHOP_TITLE,
 } from "@/lib/workshop/content"
+import { localeTag, tr, type Locale } from "@/lib/workshop/i18n"
 import { SEGMENT_IDS, type View } from "@/lib/workshop/types"
 import { cn } from "@/lib/utils"
 import {
@@ -38,7 +39,13 @@ const VIEWS: { id: View; label: string; icon: typeof LayoutList }[] = [
 ]
 
 /** Segment timer — soft alert at 3 minutes remaining, hard stop at 0. */
-function SegmentTimer() {
+function SegmentTimer({
+  locale,
+  onJumpToSegment,
+}: {
+  locale: Locale
+  onJumpToSegment: (segmentId: number) => void
+}) {
   const [segmentIdx, setSegmentIdx] = useState(0)
   const segment = SEGMENTS[segmentIdx]
   const [remaining, setRemaining] = useState(segment.minutes * 60)
@@ -75,13 +82,17 @@ function SegmentTimer() {
       <Clock className={cn("h-4 w-4", hardStop && "text-danger")} />
       <select
         value={segmentIdx}
-        onChange={(event) => setSegmentIdx(Number(event.target.value))}
+        onChange={(event) => {
+          const nextIdx = Number(event.target.value)
+          setSegmentIdx(nextIdx)
+          onJumpToSegment(SEGMENTS[nextIdx].id)
+        }}
         className="bg-transparent text-sm focus:outline-none max-w-[130px]"
-        aria-label="Timer segment"
+        aria-label={tr(locale, "Timer segment")}
       >
         {SEGMENTS.map((entry, idx) => (
           <option key={entry.id} value={idx}>
-            {entry.id}. {entry.title} · {entry.minutes}m
+            {entry.id}. {tr(locale, entry.title)} · {entry.minutes}m
           </option>
         ))}
       </select>
@@ -98,7 +109,7 @@ function SegmentTimer() {
         size="sm"
         variant="text"
         onClick={() => setRunning((value) => !value)}
-        aria-label={running ? "Pause timer" : "Start timer"}
+        aria-label={running ? tr(locale, "Pause timer") : tr(locale, "Start timer")}
         className="px-1.5"
       >
         {running ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
@@ -107,8 +118,14 @@ function SegmentTimer() {
         type="button"
         size="sm"
         variant="text"
-        onClick={() => setSegmentIdx((idx) => Math.min(idx + 1, SEGMENTS.length - 1))}
-        aria-label="Next segment"
+        onClick={() =>
+          setSegmentIdx((idx) => {
+            const nextIdx = Math.min(idx + 1, SEGMENTS.length - 1)
+            onJumpToSegment(SEGMENTS[nextIdx].id)
+            return nextIdx
+          })
+        }
+        aria-label={tr(locale, "Next segment")}
         className="px-1.5"
       >
         <SkipForward className="h-4 w-4" />
@@ -117,16 +134,25 @@ function SegmentTimer() {
   )
 }
 
-function SavedIndicator({ lastSavedAt }: { lastSavedAt: Date | null }) {
+function SavedIndicator({
+  lastSavedAt,
+  locale,
+}: {
+  lastSavedAt: Date | null
+  locale: Locale
+}) {
   if (!lastSavedAt) return null
   return (
     <span
       className="flex items-center gap-1 text-xs text-muted tabular-nums shrink-0"
-      title="Everything on this board autosaves to this browser as you type. Snapshots and a downloadable board file live in the Export tab."
+      title={tr(
+        locale,
+        "Everything on this board autosaves to this browser as you type. Snapshots and a downloadable board file live in the Export tab."
+      )}
     >
       <Check className="h-3.5 w-3.5 text-ok" />
-      Saved{" "}
-      {lastSavedAt.toLocaleTimeString([], {
+      {tr(locale, "Saved")}{" "}
+      {lastSavedAt.toLocaleTimeString(localeTag(locale), {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -136,7 +162,7 @@ function SavedIndicator({ lastSavedAt }: { lastSavedAt: Date | null }) {
 }
 
 export function WorkshopShell({ children }: { children: React.ReactNode }) {
-  const { state, patch, reset, lastSavedAt } = useWorkshop()
+  const { state, patch, reset, lastSavedAt, locale, setLocale } = useWorkshop()
 
   const completedCount = useMemo(
     () => SEGMENT_IDS.filter((id) => state.completed[id]).length,
@@ -147,11 +173,35 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
   const confirmReset = () => {
     if (
       window.confirm(
-        "Clear this browser's workshop notes? A snapshot is kept — you can restore it from the Export tab. This does not affect anyone else's device."
+        tr(
+          locale,
+          "Clear this browser's workshop notes? A snapshot is kept — you can restore it from the Export tab. This does not affect anyone else's device."
+        )
       )
     ) {
       reset()
     }
+  }
+
+  const jumpToSegment = (segmentId: number) => {
+    if (state.view !== "board") {
+      patch({ view: "board" })
+    }
+
+    // Wait for potential view switch render, then perform explicit scroll.
+    window.setTimeout(() => {
+      const target = document.getElementById(`segment-${segmentId}`)
+      if (!target) return
+      const offset = 168
+      const targetY = Math.max(
+        0,
+        window.scrollY + target.getBoundingClientRect().top - offset
+      )
+      window.scrollTo({ top: targetY, behavior: "smooth" })
+      // Second pass keeps the position stable after any layout shift.
+      window.setTimeout(() => window.scrollTo({ top: targetY }), 180)
+      window.history.replaceState(null, "", `#segment-${segmentId}`)
+    }, 40)
   }
 
   return (
@@ -170,16 +220,38 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
               />
               <div className="min-w-0">
                 <p className="font-display text-lg leading-tight truncate">
-                  {WORKSHOP_TITLE}
+                  {tr(locale, WORKSHOP_TITLE)}
                 </p>
                 <p className="text-sm text-muted truncate">
-                  {WORKSHOP_SUBTITLE} · {state.meta.date}
+                  {tr(locale, WORKSHOP_SUBTITLE)} · {state.meta.date}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <SegmentTimer />
+              <SegmentTimer locale={locale} onJumpToSegment={jumpToSegment} />
+              <div className="flex items-center rounded-sm border overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setLocale("en")}
+                  className={cn(
+                    "px-2.5 h-9 text-xs font-medium",
+                    locale === "en" ? "bg-action text-action-on" : "bg-surface text-muted"
+                  )}
+                >
+                  EN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setLocale("it")}
+                  className={cn(
+                    "px-2.5 h-9 text-xs font-medium border-l",
+                    locale === "it" ? "bg-action text-action-on" : "bg-surface text-muted"
+                  )}
+                >
+                  IT
+                </button>
+              </div>
               <nav className="flex gap-1" aria-label="Views">
                 {VIEWS.map(({ id, label, icon: Icon }) => (
                   <Button
@@ -190,7 +262,7 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
                     onClick={() => patch({ view: id })}
                   >
                     <Icon className="h-4 w-4" />
-                    {label}
+                    {tr(locale, label)}
                   </Button>
                 ))}
               </nav>
@@ -199,13 +271,13 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
                 variant="text"
                 size="sm"
                 onClick={confirmReset}
-                aria-label="Reset board"
+                aria-label={tr(locale, "Reset board")}
               >
                 <RotateCcw className="h-4 w-4" />
               </Button>
               <form action={lockWorkshop}>
                 <Button type="submit" variant="text" size="sm">
-                  Lock
+                  {tr(locale, "Lock")}
                 </Button>
               </form>
             </div>
@@ -218,7 +290,7 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
               aria-valuenow={completedCount}
               aria-valuemin={0}
               aria-valuemax={SEGMENT_IDS.length}
-              aria-label="Segments complete"
+              aria-label={tr(locale, "Segments complete")}
             >
               <div
                 className="h-full bg-action transition-[width] duration-500"
@@ -226,9 +298,9 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
               />
             </div>
             <span className="text-sm text-muted tabular-nums shrink-0">
-              {completedCount}/{SEGMENT_IDS.length} segments complete
+              {completedCount}/{SEGMENT_IDS.length} {tr(locale, "Segments complete").toLowerCase()}
             </span>
-            <SavedIndicator lastSavedAt={lastSavedAt} />
+            <SavedIndicator lastSavedAt={lastSavedAt} locale={locale} />
           </div>
         </div>
       </header>

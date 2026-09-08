@@ -1,6 +1,7 @@
 "use client"
 
 import { MVP_CHALLENGES, TIERS } from "@/lib/workshop/content"
+import { tr } from "@/lib/workshop/i18n"
 import type { ListItem, TierItem } from "@/lib/workshop/types"
 import { cn } from "@/lib/utils"
 import { Check } from "lucide-react"
@@ -8,7 +9,7 @@ import { AddableList, ExampleHint, Input } from "../fields"
 import { useWorkshop } from "../WorkshopProvider"
 
 export function Segment3Mvp() {
-  const { state, setState } = useWorkshop()
+  const { state, setState, locale } = useWorkshop()
 
   const setTier1 = (tier1: TierItem[]) =>
     setState((current) => ({ ...current, tier1 }))
@@ -24,10 +25,13 @@ export function Segment3Mvp() {
     <div className="flex flex-col gap-5">
       {/* Tier 1 with the template's agreement checkboxes */}
       <div className="rounded-md border border-action/30 bg-action-soft/50 p-4">
-        <p className="label-md text-ink">{TIERS.tier1.title}</p>
+        <p className="label-md text-ink">{tr(locale, TIERS.tier1.title)}</p>
         <p className="text-sm text-muted mb-3">
-          {TIERS.tier1.subtitle} — check ✓ when everyone agrees the feature is
-          in. Tier 1 must include exactly ONE AI feature.
+          {tr(locale, TIERS.tier1.subtitle)} —{" "}
+          {tr(
+            locale,
+            "check ✓ when everyone agrees the feature is in. Tier 1 must include exactly ONE AI feature."
+          )}
         </p>
         <AddableList
           items={state.tier1}
@@ -39,8 +43,8 @@ export function Segment3Mvp() {
               })
             )
           }
-          placeholder="Feature everyone agrees on"
-          addLabel="Add"
+          placeholder={tr(locale, "Feature everyone agrees on")}
+          addLabel={tr(locale, "Add")}
           renderExtra={(item: ListItem) => {
             const tierItem = state.tier1.find((entry) => entry.id === item.id)
             const agreed = tierItem?.agreed ?? false
@@ -57,19 +61,19 @@ export function Segment3Mvp() {
                 )}
               >
                 <Check className="h-3 w-3" />
-                {agreed ? "Agreed" : "TBD"}
+                {agreed ? tr(locale, "Agreed") : tr(locale, "TBD")}
               </button>
             )
           }}
         />
         <div className="mt-2">
-          <ExampleHint>{TIERS.tier1.examples.join(" · ")}</ExampleHint>
+          <ExampleHint>{tr(locale, TIERS.tier1.examples.join(" · "))}</ExampleHint>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
           <label className="flex flex-col gap-1.5">
             <span className="label-md text-ink">
-              Can we launch with this? (launch readiness)
+              {tr(locale, "Can we launch with this? (launch readiness)")}
             </span>
             <div className="flex gap-2">
               {(["yes", "no"] as const).map((answer) => (
@@ -91,74 +95,76 @@ export function Segment3Mvp() {
                       : "bg-surface text-muted hover:border-action"
                   )}
                 >
-                  {answer}
+                  {tr(locale, answer)}
                 </button>
               ))}
             </div>
           </label>
           <Input
-            label="Design owner"
+            label={tr(locale, "Design owner")}
             value={state.tier1DesignOwner}
             onChange={(value) =>
               setState((current) => ({ ...current, tier1DesignOwner: value }))
             }
-            placeholder="Name"
+            placeholder={tr(locale, "Name")}
           />
           <Input
-            label="Est. engineering weeks"
+            label={tr(locale, "Est. engineering weeks")}
             value={state.tier1EngWeeks}
             onChange={(value) =>
               setState((current) => ({ ...current, tier1EngWeeks: value }))
             }
-            placeholder="e.g. 8–12"
+            placeholder={tr(locale, "e.g. 8–12")}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="rounded-md border p-4">
-          <p className="label-md text-ink">{TIERS.tier2.title}</p>
-          <p className="text-sm text-muted mb-3">{TIERS.tier2.subtitle}</p>
+          <p className="label-md text-ink">{tr(locale, TIERS.tier2.title)}</p>
+          <p className="text-sm text-muted mb-3">{tr(locale, TIERS.tier2.subtitle)}</p>
           <AddableList
             items={state.tier2}
             onChange={(tier2) => setState((current) => ({ ...current, tier2 }))}
-            placeholder="Defer to later (note why)"
-            addLabel="Add"
+            placeholder={tr(locale, "Defer to later (note why)")}
+            addLabel={tr(locale, "Add")}
           />
           <div className="mt-2">
-            <ExampleHint>{TIERS.tier2.examples.join(" · ")}</ExampleHint>
+            <ExampleHint>{tr(locale, TIERS.tier2.examples.join(" · "))}</ExampleHint>
           </div>
           <div className="mt-3">
             <Input
-              label="Timeline (weeks after launch?)"
+              label={tr(locale, "Timeline (weeks after launch?)")}
               value={state.tier2Timeline}
               onChange={(value) =>
                 setState((current) => ({ ...current, tier2Timeline: value }))
               }
-              placeholder="e.g. 6–8 weeks post-launch"
+              placeholder={tr(locale, "e.g. 6–8 weeks post-launch")}
             />
           </div>
         </div>
 
         <div className="rounded-md border p-4">
-          <p className="label-md text-ink">{TIERS.tier3.title}</p>
-          <p className="text-sm text-muted mb-3">{TIERS.tier3.subtitle}</p>
+          <p className="label-md text-ink">{tr(locale, TIERS.tier3.title)}</p>
+          <p className="text-sm text-muted mb-3">{tr(locale, TIERS.tier3.subtitle)}</p>
           <AddableList
             items={state.tier3}
             onChange={(tier3) => setState((current) => ({ ...current, tier3 }))}
-            placeholder="Deprioritize completely"
-            addLabel="Add"
+            placeholder={tr(locale, "Deprioritize completely")}
+            addLabel={tr(locale, "Add")}
           />
           <div className="mt-2">
-            <ExampleHint>{TIERS.tier3.examples.join(" · ")}</ExampleHint>
+            <ExampleHint>{tr(locale, TIERS.tier3.examples.join(" · "))}</ExampleHint>
           </div>
         </div>
       </div>
 
       <div>
         <p className="label-md text-ink mb-2">
-          Challenge questions · 8 minutes — facilitator writes decisions as they
-          speak
+          {tr(
+            locale,
+            "Challenge questions · 8 minutes — facilitator writes decisions as they speak"
+          )}
         </p>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {MVP_CHALLENGES.map((challenge) => (
@@ -166,8 +172,9 @@ export function Segment3Mvp() {
               key={challenge.role}
               className="rounded-sm border bg-sunken px-3 py-2 text-sm"
             >
-              <span className="font-medium text-ink">{challenge.role}</span>{" "}
-              <span className="text-muted">asks:</span> {challenge.question}
+              <span className="font-medium text-ink">{tr(locale, challenge.role)}</span>{" "}
+              <span className="text-muted">{tr(locale, "asks:")}</span>{" "}
+              {tr(locale, challenge.question)}
             </li>
           ))}
         </ul>

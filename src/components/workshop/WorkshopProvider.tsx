@@ -11,6 +11,7 @@ import {
   type Dispatch,
   type SetStateAction,
 } from "react"
+import { LOCALE_STORAGE_KEY, type Locale } from "@/lib/workshop/i18n"
 import { WORKSHOP_STORAGE_KEY, type WorkshopState } from "@/lib/workshop/types"
 import { createEmptyState, mergeWorkshopState, uid } from "@/lib/workshop/state"
 
@@ -31,6 +32,8 @@ export type Snapshot = {
 type WorkshopContextValue = {
   state: WorkshopState
   setState: Dispatch<SetStateAction<WorkshopState>>
+  locale: Locale
+  setLocale: (locale: Locale) => void
   hydrated: boolean
   lastSavedAt: Date | null
   snapshots: Snapshot[]
@@ -55,6 +58,7 @@ function readSnapshots(): Snapshot[] {
 
 export function WorkshopProvider({ children }: { children: React.ReactNode }) {
   const [state, setState] = useState<WorkshopState>(createEmptyState)
+  const [locale, setLocaleState] = useState<Locale>("en")
   const [hydrated, setHydrated] = useState(false)
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null)
   const [snapshots, setSnapshots] = useState<Snapshot[]>([])
@@ -66,6 +70,10 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
       if (raw) setState(mergeWorkshopState(JSON.parse(raw)))
     } catch {
       // keep empty state
+    }
+    const savedLocale = window.localStorage.getItem(LOCALE_STORAGE_KEY)
+    if (savedLocale === "it" || savedLocale === "en") {
+      setLocaleState(savedLocale)
     }
     setSnapshots(readSnapshots())
     lastSnapshotAtRef.current = Date.now()
@@ -142,10 +150,17 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
     setState((current) => ({ ...current, ...partial }))
   }, [])
 
+  const setLocale = useCallback((value: Locale) => {
+    setLocaleState(value)
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, value)
+  }, [])
+
   const value = useMemo(
     () => ({
       state,
       setState,
+      locale,
+      setLocale,
       hydrated,
       lastSavedAt,
       snapshots,
@@ -156,6 +171,8 @@ export function WorkshopProvider({ children }: { children: React.ReactNode }) {
     }),
     [
       state,
+      locale,
+      setLocale,
       hydrated,
       lastSavedAt,
       snapshots,
