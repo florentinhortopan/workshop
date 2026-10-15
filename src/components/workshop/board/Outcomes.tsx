@@ -45,14 +45,14 @@ export function Outcomes() {
           rows={5}
           value={state.outcomes.decisions}
           onChange={(value) => setOutcome("decisions", value)}
-          placeholder={"✓ Tier 1 features: …\n✓ Timeline: …\n✓ AI bet: …"}
+          placeholder={tr(locale, "✓ Tier 1 features: …\n✓ Timeline: …\n✓ AI bet: …")}
         />
         <Field
           label={tr(locale, "Who owns what")}
           rows={5}
           value={state.outcomes.ownership}
           onChange={(value) => setOutcome("ownership", value)}
-          placeholder={"- Design: …\n- Engineering: …\n- Finance: …"}
+          placeholder={tr(locale, "- Design: …\n- Engineering: …\n- Finance: …")}
         />
         <Field
           label={tr(locale, "Critical blockers (resolve by)")}
@@ -69,7 +69,7 @@ export function Outcomes() {
             label={tr(locale, "Next board update")}
             value={state.outcomes.nextUpdate}
             onChange={(value) => setOutcome("nextUpdate", value)}
-            placeholder={REVIEW_DATE}
+            placeholder={tr(locale, REVIEW_DATE)}
           />
           <Field
             label={tr(locale, "Notes & parking lot")}

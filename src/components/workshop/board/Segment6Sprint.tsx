@@ -95,7 +95,7 @@ export function Segment6Sprint() {
       <div>
         <div className="flex items-center justify-between mb-2">
           <p className="label-md text-ink">
-            {tr(locale, "Rapid-fire · 1 minute per owner — due by")} {REVIEW_DATE}
+            {tr(locale, "Rapid-fire · 1 minute per owner — due by")} {tr(locale, REVIEW_DATE)}
           </p>
           <div className="flex gap-2">
             <Button
@@ -164,7 +164,7 @@ export function Segment6Sprint() {
                       type="button"
                       onClick={() => removeRow(row.id)}
                       className="text-muted hover:text-ink mt-2"
-                      aria-label={`Remove ${row.role || "sprint"} row`}
+                      aria-label={`${tr(locale, "Remove")} ${row.role || tr(locale, "sprint")} row`}
                     >
                       <X className="h-4 w-4" />
                     </button>

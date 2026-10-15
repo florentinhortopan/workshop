@@ -1,6 +1,6 @@
 export const WORKSHOP_STORAGE_KEY = "ida-workshop-v2"
 
-export type View = "board" | "guide" | "export"
+export type View = "board" | "guide" | "export" | "plan"
 
 export const SEGMENT_IDS = [1, 2, 3, 4, 5, 6] as const
 export type SegmentId = (typeof SEGMENT_IDS)[number]

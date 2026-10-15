@@ -52,7 +52,7 @@ export function ExportView() {
             locale,
             "Assembled live from the board. Review it, fill any [TBD] gaps on the Board tab, then copy and send to the team within 24 hours. This is binding for the next 30 days — next review"
           )}{" "}
-          {state.outcomes.nextUpdate || REVIEW_DATE}.
+          {state.outcomes.nextUpdate || tr(locale, REVIEW_DATE)}.
         </p>
         <div className="flex gap-2 mt-4">
           <Button type="button" onClick={copy}>
@@ -110,13 +110,12 @@ function BoardRecord() {
   }
 
   const confirmRestore = (id: string, label: string) => {
+    const message =
+      locale === "it"
+        ? `${tr(locale, "Restore the board to the snapshot from")} ${label}? ${tr(locale, "The current board is snapshotted first, so nothing is lost.")}`
+        : `Restore the board to the snapshot from ${label}? The current board is snapshotted first, so nothing is lost.`
     if (
-      window.confirm(
-        tr(
-          locale,
-          `Restore the board to the snapshot from ${label}? The current board is snapshotted first, so nothing is lost.`
-        )
-      )
+      window.confirm(message)
     ) {
       restoreSnapshot(id)
     }
@@ -149,7 +148,7 @@ function BoardRecord() {
           accept="application/json,.json"
           onChange={onFilePicked}
           className="hidden"
-          aria-label="Restore board from file"
+          aria-label={tr(locale, "Restore board from file")}
         />
       </div>
       {restoreError ? (

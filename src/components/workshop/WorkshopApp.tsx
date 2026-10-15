@@ -3,6 +3,7 @@
 import { BoardView } from "./board/BoardView"
 import { ExportView } from "./ExportView"
 import { GuideView } from "./GuideView"
+import { PlanView } from "./PlanView"
 import { tr } from "@/lib/workshop/i18n"
 import { WorkshopProvider, useWorkshop } from "./WorkshopProvider"
 import { WorkshopShell } from "./WorkshopShell"
@@ -14,6 +15,8 @@ function ActiveView() {
       return <GuideView />
     case "export":
       return <ExportView />
+    case "plan":
+      return <PlanView />
     default:
       return <BoardView />
   }

@@ -69,7 +69,7 @@ export function Segment4Timeline() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {state.months.map((month) => (
           <div key={month.id} className="rounded-md border p-4">
-            <p className="label-md text-ink mb-3">{month.label}</p>
+            <p className="label-md text-ink mb-3">{tr(locale, month.label)}</p>
             <div className="flex flex-col gap-3">
               <Field
                 label={tr(locale, "Week 1–2")}
@@ -205,7 +205,7 @@ export function Segment4Timeline() {
                         type="button"
                         onClick={() => removeBlocker(row.id)}
                         className="text-muted hover:text-ink mt-2"
-                        aria-label="Remove blocker"
+                        aria-label={tr(locale, "Remove blocker")}
                       >
                         <X className="h-4 w-4" />
                       </button>

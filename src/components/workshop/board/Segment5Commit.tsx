@@ -180,7 +180,7 @@ export function Segment5Commit() {
                       type="button"
                       onClick={() => removeOwner(row.id)}
                       className="text-muted hover:text-ink mt-2"
-                      aria-label={`Remove ${row.role || "owner"} row`}
+                      aria-label={`${tr(locale, "Remove")} ${row.role || tr(locale, "owner")} row`}
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -258,7 +258,7 @@ export function Segment5Commit() {
                 type="button"
                 onClick={() => removeSignOff(row.id)}
                 className="text-muted hover:text-ink justify-self-start md:justify-self-auto"
-                aria-label={`Remove ${row.role || "sign-off"} row`}
+                aria-label={`${tr(locale, "Remove")} ${row.role || tr(locale, "sign-off")} row`}
               >
                 <X className="h-4 w-4" />
               </button>

@@ -138,7 +138,7 @@ export function BoardView() {
                   type="button"
                   onClick={() => removeParticipant(participant.id)}
                   className="text-muted hover:text-ink shrink-0"
-                  aria-label={`Remove ${participant.role || "participant"}`}
+                  aria-label={`${tr(locale, "Remove")} ${participant.role || tr(locale, "participant")}`}
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -157,7 +157,7 @@ export function BoardView() {
       {/* Segment jump nav */}
       <nav
         className="sticky top-[104px] z-10 flex gap-2 overflow-x-auto py-1 -my-1"
-        aria-label="Segments"
+        aria-label={tr(locale, "Segments")}
       >
         {SEGMENTS.map((segment) => (
           <a

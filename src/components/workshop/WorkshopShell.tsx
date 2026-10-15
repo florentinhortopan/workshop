@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/Button"
 import { lockWorkshop } from "@/lib/workshop/auth"
 import {
   SEGMENTS,
+  WORKSHOP_DATE,
   WORKSHOP_SUBTITLE,
   WORKSHOP_TITLE,
 } from "@/lib/workshop/content"
@@ -16,6 +17,7 @@ import {
   Clock,
   LayoutList,
   Mail,
+  Map,
   Pause,
   Play,
   RotateCcw,
@@ -36,6 +38,7 @@ const VIEWS: { id: View; label: string; icon: typeof LayoutList }[] = [
   { id: "board", label: "Board", icon: LayoutList },
   { id: "guide", label: "Guide", icon: BookOpen },
   { id: "export", label: "Export", icon: Mail },
+  { id: "plan", label: "Plan", icon: Map },
 ]
 
 /** Segment timer — soft alert at 3 minutes remaining, hard stop at 0. */
@@ -169,6 +172,8 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
     [state.completed]
   )
   const progress = (completedCount / SEGMENT_IDS.length) * 100
+  const displayDate =
+    state.meta.date === WORKSHOP_DATE ? tr(locale, WORKSHOP_DATE) : state.meta.date
 
   const confirmReset = () => {
     if (
@@ -223,7 +228,7 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
                   {tr(locale, WORKSHOP_TITLE)}
                 </p>
                 <p className="text-sm text-muted truncate">
-                  {tr(locale, WORKSHOP_SUBTITLE)} · {state.meta.date}
+                  {tr(locale, WORKSHOP_SUBTITLE)} · {displayDate}
                 </p>
               </div>
             </div>
@@ -252,7 +257,7 @@ export function WorkshopShell({ children }: { children: React.ReactNode }) {
                   IT
                 </button>
               </div>
-              <nav className="flex gap-1" aria-label="Views">
+              <nav className="flex gap-1" aria-label={tr(locale, "Views")}>
                 {VIEWS.map(({ id, label, icon: Icon }) => (
                   <Button
                     key={id}

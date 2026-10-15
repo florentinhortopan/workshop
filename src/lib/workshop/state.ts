@@ -266,7 +266,7 @@ export function mergeWorkshopState(raw: unknown): WorkshopState {
         : empty.signOffs,
     sprint: parsed.sprint && parsed.sprint.length ? parsed.sprint : empty.sprint,
     view:
-      parsed.view === "guide" || parsed.view === "export"
+      parsed.view === "guide" || parsed.view === "export" || parsed.view === "plan"
         ? parsed.view
         : "board",
   }

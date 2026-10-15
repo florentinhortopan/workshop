@@ -12,6 +12,7 @@ const IT_TEXT: Record<string, string> = {
   "Board": "Lavagna",
   "Guide": "Guida",
   "Export": "Esporta",
+  "Plan": "Piano",
   "Saved": "Salvato",
   "Loading workspace…": "Caricamento workspace…",
   "Unlisted team workspace. Ask Florentin for the password.":
@@ -52,13 +53,13 @@ const IT_TEXT: Record<string, string> = {
   "Restore": "Ripristina",
   "Workshop outcomes": "Risultati del workshop",
   "What we decided": "Cosa abbiamo deciso",
-  "Who owns what": "Chi e' owner di cosa",
+  "Who owns what": "Chi e' responsabile di cosa",
   "Critical blockers (resolve by)": "Blocker critici (da risolvere entro)",
   "Next board update": "Prossimo aggiornamento lavagna",
-  "Notes & parking lot": "Note e parking lot",
+  "Notes & parking lot": "Note e temi da riprendere",
   "Items that came up but don't fit in 60 min — revisit later.":
     "Temi emersi ma non gestibili in 60 minuti: da riprendere dopo.",
-  "Post-workshop checklist": "Checklist post-workshop",
+  "Post-workshop checklist": "Checklist post workshop",
   "Generate the 24-hour email →": "Genera email entro 24 ore →",
   "Everyone replies: “Confirmed — I own [my piece]”.":
     "Tutti rispondono: “Confermato — sono owner di [mia parte]”.",
@@ -78,7 +79,7 @@ const IT_TEXT: Record<string, string> = {
   "e.g. trust and verification dominate; payouts second":
     "es. fiducia e verifica dominano; pagamenti al secondo posto",
   "Breakout by role · 2 minutes each, parallel thinking":
-    "Breakout per ruolo · 2 minuti ciascuno, pensiero in parallelo",
+    "Confronto per ruolo · 2 minuti ciascuno, pensiero in parallelo",
   "Write in parallel — 2 minutes": "Scrivi in parallelo — 2 minuti",
   "Facilitator synthesizes · 3 minutes": "Il facilitatore sintetizza · 3 minuti",
   "What AI solves for sellers": "Cosa risolve l'AI per i venditori",
@@ -98,15 +99,15 @@ const IT_TEXT: Record<string, string> = {
   "Can we launch with this? (launch readiness)": "Possiamo lanciare con questo? (prontezza al lancio)",
   "yes": "si",
   "no": "no",
-  "Design owner": "Owner design",
-  "Est. engineering weeks": "Stima settimane engineering",
+  "Design owner": "Responsabile design",
+  "Est. engineering weeks": "Stima settimane sviluppo",
   "e.g. 8–12": "es. 8-12",
   "Tier 2 · Should have": "Tier 2 · Importante",
   "Italia follow-on + U.S. launch": "Evoluzione Italia + lancio USA",
   "Defer to later (note why)": "Rimanda a dopo (indica il motivo)",
   "Timeline (weeks after launch?)": "Timeline (settimane dopo il lancio?)",
   "e.g. 6–8 weeks post-launch": "es. 6-8 settimane post-lancio",
-  "Tier 3 · Nice to have": "Tier 3 · Nice to have",
+  "Tier 3 · Nice to have": "Tier 3 · Opzionale",
   "Post-launch — deprioritize or postpone": "Post-lancio — de-prioritizza o rimanda",
   "Deprioritize completely": "De-prioritizza completamente",
   "Challenge questions · 8 minutes — facilitator writes decisions as they speak":
@@ -131,7 +132,7 @@ const IT_TEXT: Record<string, string> = {
   "Critical blockers (must resolve)": "Blocker critici (da risolvere)",
   "Add blocker": "Aggiungi blocker",
   "Blocker": "Blocker",
-  "Owner": "Owner",
+  "Owner": "Responsabile",
   "Deadline": "Scadenza",
   "Status": "Stato",
   "Remove": "Rimuovi",
@@ -141,14 +142,14 @@ const IT_TEXT: Record<string, string> = {
     "Le righe rosse restano evidenziate finche' non risolte. Non lasciare mai un blocker nascosto fino alla settimana 6.",
   "Red flags (what could derail us)": "Red flag (cosa puo' far deragliare il piano)",
   "What needs agreement · 5 min": "Cosa richiede allineamento · 5 min",
-  "Owned by": "Owner",
+  "Owned by": "Responsabile",
   "Current": "Attuale",
   "✓ Agree or change": "✓ Concorda o modifica",
   "✓ agree — or the modification": "✓ concorda — oppure modifica",
   "Owner assignments & sign-offs": "Assegnazioni owner e approvazioni",
   "Add owner": "Aggiungi owner",
   "Role": "Ruolo",
-  "Owner name": "Nome owner",
+  "Owner name": "Nome responsabile",
   "Commitment": "Impegno",
   "Blocker?": "Blocker?",
   "Owner role": "Ruolo owner",
@@ -169,19 +170,19 @@ const IT_TEXT: Record<string, string> = {
   "Pull owners from Segment 5": "Importa owner dal Segmento 5",
   "What they own": "Di cosa sono owner",
   "Due date": "Data prevista",
-  "Deliverable": "Deliverable",
+  "Deliverable": "Consegna",
   "Sprint owner role": "Ruolo owner sprint",
   "What lands on the table?": "Cosa viene consegnato?",
   "Success metrics (Day 1 of launch)": "Metriche di successo (Giorno 1 del lancio)",
   "Investor conversations": "Conversazioni con investitori",
   "e.g. 20 first meetings": "es. 20 primi incontri",
-  "Sellers onboarded": "Venditori onboarded",
+  "Sellers onboarded": "Venditori attivati",
   "€ MRR": "€ MRR",
   "% seller retention": "% retention venditori",
   "% system uptime": "% uptime sistema",
   "Media mentions": "Menzioni media",
   "Facilitator & participant guide": "Guida facilitatore e partecipanti",
-  "Agenda · 60 minutes, hard stop": "Agenda · 60 minuti, hard stop",
+  "Agenda · 60 minutes, hard stop": "Agenda · 60 minuti, stop rigido",
   "Roles during the session": "Ruoli durante la sessione",
   "Who fills in each segment": "Chi compila ogni segmento",
   "Task": "Attivita'",
@@ -222,7 +223,7 @@ const IT_TEXT: Record<string, string> = {
     "Tutti rispondono a questa email: \"Confermato — sono owner di [mia parte]\"",
   "Add to calendars": "Aggiungere in calendario",
   "Weekly 15-min standups": "Standup settimanali da 15 min",
-  "30-day review": "Review a 30 giorni",
+  "30-day review": "Verifica a 30 giorni",
   "Monthly reviews (1st Friday of each month)": "Review mensili (primo venerdi' del mese)",
   "Blocker owners: start TODAY — legal timelines don't compress.":
     "Owner dei blocker: partire OGGI — i tempi legali non si comprimono.",
@@ -233,7 +234,7 @@ const IT_TEXT: Record<string, string> = {
     "Queste decisioni valgono per i prossimi 30 giorni. Se timeline o vincoli cambiano, segnalarlo subito in standup.",
   "We're close. Let's execute.": "Ci siamo quasi. Eseguiamo.",
   "investor conversations": "conversazioni con investitori",
-  "sellers onboarded": "venditori onboarded",
+  "sellers onboarded": "venditori attivati",
   "seller retention": "retention venditori",
   "system uptime": "uptime sistema",
   "media mentions": "menzioni media",
@@ -386,6 +387,180 @@ const IT_TEXT: Record<string, string> = {
   "Runway model + data room by…": "Modello runway + data room entro...",
   "Open": "Aperto",
   "in progress": "in corso",
+  "The Board tab is the live tracker — fill it in as the group speaks, mark segments complete, and the progress bar updates for everyone watching the projector. This page is the script, the rules, and the checklists. After the session, the Export tab assembles the summary email to send within 24 hours.":
+    "La scheda Lavagna e' il tracker in tempo reale: compilala mentre il gruppo parla, segna i segmenti completati e la barra di avanzamento si aggiorna per tutti sul proiettore. Questa pagina contiene script, regole e checklist. Dopo la sessione, la scheda Esporta compone l'email riepilogativa da inviare entro 24 ore.",
+  "Running long? Cut Segment 4 or 5 — everything else is higher priority.":
+    "Se andate lunghi, tagliate il Segmento 4 o 5: tutto il resto ha priorita' maggiore.",
+  "Everything on this board autosaves to this browser as you type. Snapshots and a downloadable board file live in the Export tab.":
+    "Tutto su questa lavagna viene salvato automaticamente in questo browser mentre scrivi. Le istantanee e il file lavagna scaricabile sono nella scheda Esporta.",
+  "Closing · 5 minutes": "Chiusura · 5 minuti",
+  "That file isn't a workshop board export.":
+    "Quel file non e' un export della lavagna workshop.",
+  "Couldn't read that file as JSON.": "Impossibile leggere quel file come JSON.",
+  "Restore board from file": "Ripristina lavagna da file",
+  "Restore the board to the snapshot from": "Ripristina la lavagna all'istantanea del",
+  "The current board is snapshotted first, so nothing is lost.":
+    "La lavagna corrente viene salvata prima, quindi nulla va perso.",
+  "Participant": "Partecipante",
+  "participant": "partecipante",
+  "owner": "responsabile",
+  "sign-off": "approvazione",
+  "sprint": "sprint",
+  "Remove blocker": "Rimuovi blocker",
+  "Views": "Viste",
+  "Segments": "Segmenti",
+  "8 Sep 2026": "8 set 2026",
+  "8 Oct 2026": "8 ott 2026",
+  "September 2026": "Settembre 2026",
+  "October 2026": "Ottobre 2026",
+  "November 2026": "Novembre 2026",
+  "December 2026": "Dicembre 2026",
+  "due": "entro",
+  "YES": "SI",
+  "NO": "NO",
+  "WITH CONDITIONS": "CON CONDIZIONI",
+  "[unspecified]": "[non specificato]",
+  "[role TBD]": "[ruolo da definire]",
+  "30-day sprint": "Sprint a 30 giorni",
+  "AI map by role": "Mappa AI per ruolo",
+  "MVP tiers": "Tier MVP",
+  "Timeline + blockers": "Timeline + blocker",
+  "Owner commitments": "Impegni dei responsabili",
+  "Shared problems": "Problemi condivisi",
+  "Each role fills own row": "Ogni ruolo compila la propria riga",
+  "Each owner fills own row": "Ogni responsabile compila la propria riga",
+  "Note-taker + Design lead": "Responsabile note + referente design",
+  "Note-taker + owners": "Responsabile note + responsabili",
+  "Keep time aggressive": "Gestisci il tempo con fermezza",
+  "Manage conversation": "Gestisci la conversazione",
+  "Get decisions, not consensus": "Ottieni decisioni, non consenso totale",
+  "Handle disagreement": "Gestisci il disaccordo",
+  "Call out blockers early": "Fai emergere presto i blocker",
+  "Use the built-in timer — soft alert at the 3-minute mark: “3 minutes left in this segment”":
+    "Usa il timer integrato — avviso soft a 3 minuti: \"Mancano 3 minuti in questo segmento\"",
+  "Hard stop at 0 — move to the next segment regardless":
+    "Stop netto a 0: passa comunque al segmento successivo",
+  "First round: everyone speaks once on the question":
+    "Primo giro: tutti intervengono una volta sulla domanda",
+  "Second round: only if there's real disagreement":
+    "Secondo giro: solo se c'e' disaccordo reale",
+  "No third round: facilitator decides (don't debate forever)":
+    "Niente terzo giro: decide il facilitatore (evitare discussioni infinite)",
+  "Write while talking — visible decisions stop people repeating":
+    "Scrivi mentre si parla: le decisioni visibili evitano ripetizioni",
+  "“Do we agree on this list?” → look for nods":
+    "\"Siamo d'accordo su questa lista?\" -> cerca cenni di assenso",
+  "“Any hard no's?” → look for raised hands":
+    "\"Ci sono no netti?\" -> cerca mani alzate",
+  "“Finance: is this timeline realistic?” → direct question to the owner":
+    "\"Finance: questa timeline e' realistica?\" -> domanda diretta al responsabile",
+  "Silence = agreement (after you ask three times)":
+    "Silenzio = accordo (dopo aver chiesto tre volte)",
+  "“Design says 12 weeks, Engineering says 8. Design, what's the risk if we do 8?” → listen":
+    "\"Design dice 12 settimane, Engineering 8. Design, qual e' il rischio se facciamo 8?\" -> ascolta",
+  "“Engineering, can you do 10 with one more dev?” → gets to the real blocker":
+    "\"Engineering, potete fare 10 con uno sviluppatore in piu'?\" -> porta al vero blocker",
+  "Escalate to the next owner — don't solve it in the room":
+    "Escala al responsabile successivo: non risolvere tutto nella stanza",
+  "If Finance can't have the data room ready by date X, surface it now":
+    "Se Finance non puo' avere la data room pronta entro data X, evidenzialo ora",
+  "“Blocker: the raise needs 6 weeks and gates hiring. Can leadership start investor intros today?” → forces action":
+    "\"Blocker: il fundraising richiede 6 settimane e blocca le assunzioni. La leadership puo' avviare oggi le intro con gli investitori?\" -> forza l'azione",
+  "Never let a blocker hide until Week 6":
+    "Non lasciare mai un blocker nascosto fino alla settimana 6",
+  "Timeboxed aggressively (no tangents)":
+    "Riunione rigidamente timeboxata (niente tangenti)",
+  "Everyone talks (not one person dominating)":
+    "Tutti intervengono (non domina una sola persona)",
+  "Write as you go (visible decisions, not vague agreement)":
+    "Scrivi durante la discussione (decisioni visibili, non accordi vaghi)",
+  "Specific outputs (features, dates, owners — not “we'll figure it out”)":
+    "Output specifici (feature, date, responsabili — non \"lo capiremo dopo\")",
+  "Roles are clear (design talks design, finance talks finance)":
+    "Ruoli chiari (design parla di design, finance parla di finance)",
+  "Facilitator moves it (keeps time, synthesizes, prevents debate loops)":
+    "Il facilitatore guida (gestisce il tempo, sintetizza, evita loop di discussione)",
+  "Leadership asks questions and trusts domain owners":
+    "La leadership fa domande e si fida dei responsabili di dominio",
+  "A single voice dominates without listening":
+    "Una sola voce domina senza ascoltare",
+  "One person long-winded": "Una persona monopolizza il tempo",
+  "No decisions (just “let's explore options”)":
+    "Nessuna decisione (solo \"esploriamo opzioni\")",
+  "Vague outcomes (“we'll figure it out”)":
+    "Esiti vaghi (\"lo capiremo dopo\")",
+  "Missing someone (finance decides budget, design decides timeline)":
+    "Manca qualcuno (finance decide il budget, design decide la timeline)",
+  "No written agreement after": "Nessun accordo scritto finale",
+  "Lock features (no new asks during build)":
+    "Blocca le feature (niente nuove richieste durante la build)",
+  "Lock timeline (dates don't move unless a blocker resolves)":
+    "Blocca la timeline (le date non cambiano finche' un blocker non si risolve)",
+  "Lock owners (same person drives each piece)":
+    "Blocca i responsabili (la stessa persona guida ogni area)",
+  "Check in weekly (don't wait for monthly reviews)":
+    "Fai check settimanali (non aspettare le review mensili)",
+  "Escalate blockers fast (day 1, not week 6)":
+    "Escala i blocker subito (giorno 1, non settimana 6)",
+  "Vague timelines (“sometime in May”)": "Timeline vaghe (\"prima o poi a maggio\")",
+  "Changing owners mid-sprint (“John is now on it”)":
+    "Cambio responsabile a sprint in corso (\"ora se ne occupa John\")",
+  "Adding features during build (“just one more thing”)":
+    "Aggiunta feature durante la build (\"solo un'altra cosa\")",
+  "Hoping blockers resolve (“payment will figure itself out”)":
+    "Sperare che i blocker si risolvano da soli (\"i pagamenti si sistemeranno\")",
+  "Waiting for monthly review to surface issues":
+    "Aspettare la review mensile per far emergere i problemi",
+  "Florentin reviews the board for completeness":
+    "Florentin rivede la lavagna per completezza",
+  "Copy decisions into the summary email (Export tab) and send within 24 hours":
+    "Copia le decisioni nell'email di riepilogo (scheda Esporta) e invia entro 24 ore",
+  "Lock the record (view-only) and export a PDF to the shared drive":
+    "Blocca il verbale (sola lettura) ed esporta un PDF nel drive condiviso",
+  "Weekly 15-min standups until launch": "Standup settimanali da 15 minuti fino al lancio",
+  "Monthly 1-hour reviews (1st Friday of each month)":
+    "Review mensili da 1 ora (primo venerdi' del mese)",
+  "If anyone is off track at the 30-day review, hold an emergency 30-minute sync with leadership and that owner.":
+    "Se qualcuno e' fuori traiettoria alla review a 30 giorni, fate un sync d'emergenza di 30 minuti con leadership e responsabile.",
+  "Design: “Wireframes __% done — on track?”":
+    "Design: \"Wireframe al __% — siamo in linea?\"",
+  "Engineering: “Dev env ready? Blocker: [if any]”":
+    "Engineering: \"Ambiente dev pronto? Blocker: [se presente]\"",
+  "Finance: “Runway holding? Data room progress?”":
+    "Finance: \"Runway sostenibile? Avanzamento data room?\"",
+  "Communications: “Story locked? Need anything from product?”":
+    "Communications: \"Story definita? Serve qualcosa da prodotto?\"",
+  "Leadership: “Investor meetings booked? Term sheet progress? RINA API confirmed?”":
+    "Leadership: \"Meeting investitori fissati? Avanzamento term sheet? API RINA confermata?\"",
+  "One sentence per person. Stop.": "Una frase a persona. Stop.",
+  "Use BOLD for decisions that stick":
+    "Usa il GRASSETTO per le decisioni definitive",
+  "Use [BLOCKER] for items that stop progress":
+    "Usa [BLOCKER] per gli elementi che bloccano l'avanzamento",
+  "Use [TBD] for items still being decided":
+    "Usa [TBD] per gli elementi ancora da decidere",
+  "Use ✓ to mark decisions as final":
+    "Usa ✓ per segnare le decisioni finali",
+  "Everyone replies: “Confirmed — I own [my piece]”":
+    "Tutti rispondono: \"Confermato — sono owner di [mia parte]\"",
+  "30-day review on 8 Oct 2026: on track or pivoting?":
+    "verifica a 30 giorni l'8 ott 2026: in linea o da pivotare?",
+  "Summary email sent to team (within 24 hours)":
+    "Email riepilogo inviata al team (entro 24 ore)",
+  "Everyone replied: “Confirmed — I own [my piece]”":
+    "Tutti hanno risposto: \"Confermato — sono owner di [mia parte]\"",
+  "Calendar blocks booked (weekly 15-min standups, monthly reviews)":
+    "Blocchi calendario fissati (standup settimanali 15 min, review mensili)",
+  "Record locked (view-only) and PDF exported":
+    "Verbale bloccato (sola lettura) e PDF esportato",
+  "Here's what we agreed. Everyone owns a piece. If your piece falls behind, raise it immediately — don't wait three weeks. I'll send the summary email within 24 hours.":
+    "Ecco cosa abbiamo concordato. Ognuno e' responsabile di una parte. Se la tua parte rallenta, segnalarlo subito: non aspettare tre settimane. Inviero' l'email di riepilogo entro 24 ore.",
+  "⚠ Payment processor — Finance, by …\n⚠ RINA API — Leadership, by …":
+    "⚠ Payment processor — Finance, entro ...\n⚠ API RINA — Leadership, entro ...",
+  "✓ Tier 1 features: …\n✓ Timeline: …\n✓ AI bet: …":
+    "✓ Feature Tier 1: ...\n✓ Timeline: ...\n✓ Scommessa AI: ...",
+  "- Design: …\n- Engineering: …\n- Finance: …":
+    "- Design: ...\n- Engineering: ...\n- Finance: ...",
   "Participant role": "Ruolo partecipante",
   "Participant name": "Nome partecipante",
 }

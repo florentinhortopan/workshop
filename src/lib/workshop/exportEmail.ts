@@ -94,11 +94,11 @@ export function exportWorkshopEmail(state: WorkshopState, locale: Locale = "en")
     .map((row) => {
       const answer =
         row.answer === "yes"
-          ? "YES"
+          ? t("YES")
           : row.answer === "no"
-            ? "NO"
+            ? t("NO")
             : row.answer === "conditions"
-              ? `WITH CONDITIONS: ${row.conditions || "[unspecified]"}`
+              ? `${t("WITH CONDITIONS")}: ${row.conditions || t("[unspecified]")}`
               : t("[not asked]")
       return `- ${row.role || "[role TBD]"}: ${answer}`
     })
@@ -110,7 +110,7 @@ export function exportWorkshopEmail(state: WorkshopState, locale: Locale = "en")
     )
     .map(
       (row) =>
-        `- ${row.role || "[role TBD]"}: ${row.owns} (due ${row.due})${row.deliverable ? ` → ${row.deliverable}` : ""}`
+        `- ${row.role || "[role TBD]"}: ${row.owns} (${t("due")} ${row.due})${row.deliverable ? ` → ${row.deliverable}` : ""}`
     )
     .join("\n")
 
