@@ -14,6 +14,8 @@ type Scenario = {
   mix: { label: string; value: string }[]
 }
 
+type PlanTab = "execution" | "schema"
+
 type TimelineBar = {
   id: string
   lane: string
@@ -244,6 +246,69 @@ const RISK_MAP = [
   },
 ]
 
+const SCHEMA_PRINCIPLES = [
+  "Capture behavior + outcomes, not only profiles",
+  "Keep an entity graph: company, product, market, requirement, workflow, intent",
+  "Store critical actions as append-only events",
+  "Separate operational DB, analytics warehouse, and feature store",
+]
+
+const SCHEMA_DOMAINS = [
+  {
+    name: "Identity & Organization",
+    tables: ["accounts", "companies", "company_users", "company_verification", "external_ids"],
+  },
+  {
+    name: "Seller GTM",
+    tables: ["seller_profiles", "shops", "shop_claims", "products", "product_classification_runs"],
+  },
+  {
+    name: "Buyer GTM",
+    tables: ["buyer_profiles", "buyer_intents", "matches", "conversations"],
+  },
+  {
+    name: "Export/Compliance Workflow",
+    tables: ["market_requirements", "requirement_versions", "compliance_checks", "workflow_runs", "workflow_steps", "documents", "hitl_actions"],
+  },
+  {
+    name: "Commercial Layer",
+    tables: ["leads", "campaigns", "funnel_events", "subscriptions", "invoices", "payments"],
+  },
+  {
+    name: "Defendability Layer",
+    tables: ["events", "feature_values", "scores", "score_explanations", "experiment_assignments"],
+  },
+]
+
+const MOAT_FIELDS = [
+  "time_to_claim",
+  "time_to_export_ready_shop",
+  "compliance_error_rate_before_after",
+  "hs_code_confidence + human_override_rate",
+  "buyer_intent_to_deal_conversion",
+  "workflow_step_blockers by market/category",
+  "campaign_cluster_roi",
+]
+
+const EVENT_TAXONOMY = [
+  "company_identified",
+  "shop_generated",
+  "shop_claim_started / shop_claim_completed",
+  "product_classified",
+  "compliance_check_passed / compliance_check_failed",
+  "workflow_step_blocked / workflow_step_resolved",
+  "buyer_intent_created",
+  "match_generated",
+  "inquiry_sent / inquiry_accepted",
+  "subscription_started",
+]
+
+const SCHEMA_ROLLOUT = [
+  { phase: "0-30 giorni", scope: "Core operational tables + event stream + GTM funnel events" },
+  { phase: "31-60 giorni", scope: "Feature store + scoring layer + explanation logs" },
+  { phase: "61-90 giorni", scope: "Requirement versioning + HITL quality loop + experiments" },
+]
+
 function MetricCard({ label, target }: { label: string; target: string }) {
   return (
     <div className="rounded-md border bg-sunken/60 p-3">
@@ -433,8 +498,91 @@ function VisualTimeline({ isIt }: { isIt: boolean }) {
   )
 }
 
+function SchemaTabContent({ isIt }: { isIt: boolean }) {
+  return (
+    <div className="flex flex-col gap-5">
+      <Surface>
+        <h2 className="heading-sm text-ink mb-2">
+          {isIt ? "Schema dati per difendibilita e scala" : "Data schema for defendability and scale"}
+        </h2>
+        <p className="text-sm text-muted mb-3">
+          {isIt
+            ? "Questa struttura dati e' progettata per massimizzare execution oggi e data moat domani."
+            : "This data structure is designed for fast execution now and moat compounding later."}
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {SCHEMA_PRINCIPLES.map((item) => (
+            <div key={item} className="rounded-sm border bg-sunken/50 p-3 text-sm text-ink">
+              {item}
+            </div>
+          ))}
+        </div>
+      </Surface>
+
+      <Surface>
+        <h2 className="heading-sm text-ink mb-3">
+          {isIt ? "Domini schema (entita principali)" : "Schema domains (core entities)"}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {SCHEMA_DOMAINS.map((domain) => (
+            <article key={domain.name} className="rounded-md border bg-sunken/40 p-3">
+              <p className="label-md text-ink">{domain.name}</p>
+              <ul className="mt-2 space-y-1 text-sm text-muted">
+                {domain.tables.map((table) => (
+                  <li key={table}>
+                    <span className="text-ink">{table}</span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </Surface>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <Surface>
+          <h2 className="heading-sm text-ink mb-3">
+            {isIt ? "Moat fields da tracciare da subito" : "Moat fields to track from day one"}
+          </h2>
+          <ul className="space-y-1.5 text-sm text-muted">
+            {MOAT_FIELDS.map((field) => (
+              <li key={field}>- {field}</li>
+            ))}
+          </ul>
+        </Surface>
+
+        <Surface>
+          <h2 className="heading-sm text-ink mb-3">
+            {isIt ? "Event taxonomy minima" : "Minimum event taxonomy"}
+          </h2>
+          <ul className="space-y-1.5 text-sm text-muted">
+            {EVENT_TAXONOMY.map((eventName) => (
+              <li key={eventName}>- {eventName}</li>
+            ))}
+          </ul>
+        </Surface>
+      </div>
+
+      <Surface>
+        <h2 className="heading-sm text-ink mb-3">
+          {isIt ? "Rollout implementativo (90 giorni)" : "Implementation rollout (90 days)"}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {SCHEMA_ROLLOUT.map((step) => (
+            <article key={step.phase} className="rounded-md border bg-sunken/40 p-3">
+              <p className="label-md text-action">{step.phase}</p>
+              <p className="text-sm text-ink mt-1">{step.scope}</p>
+            </article>
+          ))}
+        </div>
+      </Surface>
+    </div>
+  )
+}
+
 export function PlanView() {
   const { locale, state } = useWorkshop()
+  const [planTab, setPlanTab] = useState<PlanTab>("execution")
   const isIt = locale === "it"
   const activePeople = state.participants.filter(
     (person) => person.role.trim() || person.name.trim()
@@ -482,9 +630,32 @@ export function PlanView() {
         </div>
       </Surface>
 
-      <VisualTimeline isIt={isIt} />
+      <div className="flex flex-wrap gap-2">
+        <Button
+          type="button"
+          size="sm"
+          variant={planTab === "execution" ? "filled" : "outline"}
+          onClick={() => setPlanTab("execution")}
+        >
+          {isIt ? "Piano di esecuzione" : "Execution Plan"}
+        </Button>
+        <Button
+          type="button"
+          size="sm"
+          variant={planTab === "schema" ? "filled" : "outline"}
+          onClick={() => setPlanTab("schema")}
+        >
+          {isIt ? "Schema dati e moat" : "Data Schema & Moat"}
+        </Button>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      {planTab === "schema" ? (
+        <SchemaTabContent isIt={isIt} />
+      ) : (
+        <>
+          <VisualTimeline isIt={isIt} />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         <Surface>
           <h2 className="heading-sm text-ink mb-3">
             {isIt ? "GTM operativo: dal database VAT al cluster target" : "Operating GTM: from VAT data to target clusters"}
@@ -655,7 +826,9 @@ export function PlanView() {
             </article>
           ))}
         </div>
-      </Surface>
+          </Surface>
+        </>
+      )}
     </div>
   )
 }
